@@ -1,0 +1,42 @@
+<section class="dashboard-shell">
+  <div class="dashboard-header">
+    <div class="brand">
+      <div class="brand-mark">🥃</div>
+      <div>
+        <p class="eyebrow">Snack Bar</p>
+        <h1>Dashboard</h1>
+      </div>
+    </div>
+    <button class="logout-btn" (click)="logout()">Logout</button>
+  </div>
+
+  <div class="dashboard-content">
+    <div class="welcome-card">
+      <h2>Welcome, {{ username }}!</h2>
+      <p>Your snack bar dashboard is ready. Use the buttons below to manage stock and orders.</p>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon">📦</div>
+        <h3>Inventory</h3>
+        <p>Manage products and supplies.</p>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">📋</div>
+        <h3>Orders</h3>
+        <p>View recent orders and status.</p>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">📊</div>
+        <h3>Sales</h3>
+        <p>Track sales performance.</p>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">⚙️</div>
+        <h3>Settings</h3>
+        <p>Adjust account preferences.</p>
+      </div>
+    </div>
+  </div>
+</section>
