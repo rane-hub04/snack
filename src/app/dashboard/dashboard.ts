@@ -7,14 +7,19 @@ import { Router } from '@angular/router';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './dashboard.html',
-  styleUrls: ['./dashboard.scss'],
+  styleUrls: ['./dashboard.scss']
 })
-export class Dashboard {
-  username = 'User';
+export class DashboardComponent {
+  isDarkTheme = false;
 
-  constructor(private router: Router) {
-    const state = history.state as { username?: string };
-    this.username = state.username || this.username;
+  constructor(private router: Router) {}
+
+  toggleTheme() {
+    this.isDarkTheme = !this.isDarkTheme;
+  }
+
+  get themeLabel() {
+    return this.isDarkTheme ? 'Mode nuit activé' : 'Mode jour activé';
   }
 
   logout() {

@@ -1,9 +1,12 @@
 import { Routes } from '@angular/router';
-import { Login } from './login/login';
-import { Dashboard } from './dashboard/dashboard';
+import { LoginComponent } from './login/login';
+import { DashboardComponent } from './dashboard/dashboard';
 
 export const routes: Routes = [
-  { path: '', component: Login },
-  { path: 'dashboard', component: Dashboard },
+  { path: '', component: LoginComponent },
   { path: '**', redirectTo: '' },
+];
+export const dashboardRoutes: Routes = [
+  { path: 'dashboard', component: DashboardComponent },
+  { path: '**', redirectTo: 'dashboard' }
 ];

@@ -1,51 +1,56 @@
-<section class="login-shell">
-  <div class="login-card">
-    <div class="brand">
-      <div class="brand-mark">🥃</div>
-      <div>
-        <p class="eyebrow">Snack Bar Login</p>
-        <h1>LOG IN.</h1>
+<div class="container">
+  <!-- Login Form -->
+  <div class="form-box login">
+    <form action="#">
+      <h1>Login</h1>
+      <div class="input-box">
+        <input type="text" placeholder="Username" required>
+        <i class="fa-solid fa-user"></i>
       </div>
-    </div>
+      <div class="input-box">
+        <input type="password" placeholder="Password" required>
+        <i class="fa-solid fa-lock"></i>
+      </div>
+      <div class="forget-link">
+        <a href="#">Forget Password?</a>
+      </div>
+      <button type="submit" class="btn">Login</button>
+    </form>
+  </div>
 
-    <p class="subtitle">
-      Entrer les informations d'identification de votre compte pour accéder à l'application Snack Bar.
-    </p>
-
-    <form class="login-form" (ngSubmit)="login()" novalidate>
-      <label>
-        <span>Username</span>
-        <input
-          name="username"
-          [(ngModel)]="username"
-          placeholder="Entrer votre nom d'utilisateur"
-          required
-          autocomplete="username"
-          autofocus
-        />
-      </label>
-
-      <label>
-        <span>Password</span>
-        <input
-          type="password"
-          name="password"
-          [(ngModel)]="password"
-          placeholder="••••••••"
-          required
-          autocomplete="current-password"
-        />
-      </label>
-
-      <label class="checkbox-row">
-        <input type="checkbox" name="rememberMe" [(ngModel)]="rememberMe" />
-        <span>Keep me signed in</span>
-      </label>
-
-      <button type="button" (click)="login()" [disabled]="!username || !password">Log in</button>
+  <!-- Register Form -->
+  <div class="form-box register">
+    <form action="#">
+      <h1>Registration</h1>
+      <div class="input-box">
+        <input type="text" placeholder="Username" required>
+        <i class="fa-solid fa-user"></i>
+      </div>
+      <div class="input-box">
+        <input type="email" placeholder="Email" required>
+        <i class="fa-solid fa-envelope"></i>
+      </div>
+      <div class="input-box">
+        <input type="password" placeholder="Password" required>
+        <i class="fa-solid fa-lock"></i>
+      </div>
+      <button type="submit" class="btn">Register</button>
     </form>
 
-    <div class="message error" *ngIf="error">{{ error }}</div>
-    <div class="message success" *ngIf="success">{{ success }}</div>
+    <!-- Toggle Box -->
+    <div class="toggle-box"></div>
+    <!-- Toggle Box Left -->
+    <div class="toggle-pannel toggle-left">
+      <h1>Hello, Welcome</h1>
+      <p>Don't have an account?</p>
+      <button type="button" class="btn-register-btn">Register</button>
+    </div>
+
+    <!-- Toggle Box Right -->
+    <div class="toggle-pannel toggle-right">
+      <h1>Welcome Back</h1>
+      <p>Already have an account?</p>
+      <button type="button" class="btn-login-btn">Login</button>
+    </div>
   </div>
-</section>
+</div>
