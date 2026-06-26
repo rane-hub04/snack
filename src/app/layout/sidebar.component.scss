@@ -314,7 +314,7 @@ $transition-speed: 0.3s ease-in-out;
 /* When sidebar is open on mobile, push hamburger to the right edge of the sidebar
    so it doesn't overlap the logo. Uses the sidebar width (250px) + 16px offset. */
 .hamburger.active {
-  left: calc(250px + 16px);
+  display: none;
 }
 
 .navbar-overlay {
