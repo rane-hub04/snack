@@ -1,0 +1,333 @@
+/* --------------------------------------------------------------
+   Color variables – match the palette you provided
+   -------------------------------------------------------------- */
+$color-bg: #ffffff;
+$color-text: #2c3e50;
+$color-text-light: #7f8c8d;
+$color-accent: #ff9500;
+$color-accent-light: #ffb84d;
+$color-active: #ff9500;
+$color-overlay: rgba(0, 0, 0, 0.5);
+$color-shadow: rgba(0, 0, 0, 0.08);
+$color-danger: #e74c3c;
+$color-divider: #ecf0f1;
+
+/* Breakpoints */
+$mobile: 768px;
+
+/* Transitions */
+$transition-speed: 0.3s ease-in-out;
+
+/* --------------------------------------------------------------
+   Sidebar base
+   -------------------------------------------------------------- */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 1000;
+  background-color: $color-bg;
+  box-shadow: 2px 0 12px $color-shadow;
+  border-right: 3px solid $color-accent;
+  width: 250px;
+  display: flex;
+  flex-direction: column;
+  transition: width $transition-speed;
+  overflow-x: hidden;
+  /* When collapsed */
+  &.collapsed {
+    width: 60px;
+    .sidebar-title,
+    .sidebar-label {
+      display: none;
+    }
+    .sidebar-logo {
+      width: 24px;
+      height: 24px;
+    }
+    .sidebar-header {
+      justify-content: center;
+    }
+  }
+}
+
+/* --------------------------------------------------------------
+   Container (inner wrapper)
+   -------------------------------------------------------------- */
+.sidebar-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  position: relative;
+  padding: 0;
+}
+
+/* --------------------------------------------------------------
+   Header / Brand (logo + title)
+   -------------------------------------------------------------- */
+.sidebar-header {
+  flex-shrink: 0;
+  z-index: 1001;
+  padding: 20px;
+  border-bottom: 1px solid $color-divider;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  transition: justify-content $transition-speed;
+}
+
+/* Logo wrapper (image + text) */
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: $color-text;
+  font-weight: 700;
+  font-size: 20px;
+  transform: scale(1);
+  transition: transform $transition-speed;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+
+  &:focus-visible {
+    outline: 2px solid $color-accent;
+    outline-offset: 4px;
+    border-radius: 4px;
+  }
+}
+
+/* Text part of the logo */
+.sidebar-logo-text {
+  letter-spacing: 1px;
+}
+
+/* --------------------------------------------------------------
+   Navigation Menu (desktop – vertical)
+   -------------------------------------------------------------- */
+.sidebar-nav {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.sidebar-menu {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  gap: 0;
+  margin: 0;
+  padding: 20px 0;
+  align-items: stretch;
+}
+
+.sidebar-menu-item {
+  position: relative;
+  margin: 0;
+  padding: 0;
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: $color-text;
+  font-weight: 500;
+  font-size: 15px;
+  padding: 12px 20px;
+  border-radius: 0;
+  transition: all $transition-speed;
+  position: relative;
+  border: none;
+  background: none;
+  cursor: pointer;
+  justify-content: flex-start;
+
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background-color: $color-accent;
+    transform: scaleY(0);
+    transition: transform $transition-speed;
+  }
+
+  &:hover {
+    color: $color-accent;
+    background-color: rgba($color-accent, 0.08);
+
+    &::after {
+      transform: scaleY(1);
+    }
+  }
+
+  &:focus-visible {
+    outline: 2px solid $color-accent;
+    outline-offset: -2px;
+  }
+
+  &.active {
+    color: $color-accent;
+    background-color: rgba($color-accent, 0.12);
+    font-weight: 600;
+
+    &::after {
+      transform: scaleY(1);
+    }
+  }
+}
+
+/* --------------------------------------------------------------
+   Footer / Logout section
+   -------------------------------------------------------------- */
+.sidebar-footer {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 12px;
+  padding: 20px;
+  border-top: 1px solid $color-divider;
+}
+
+/* Logout button – styled as a simple button */
+.sidebar-logout {
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+  border-radius: 6px;
+  width: 100%;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: $color-text;
+
+  &:hover {
+    color: white;
+    background-color: $color-danger !important;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $color-accent;
+    outline-offset: -2px;
+  }
+
+  &.active {
+    background-color: transparent !important;
+    color: $color-danger;
+  }
+
+  /* Inner elements */
+  .logout-button__user {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-right: auto;
+  }
+
+  .logout-button__avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background-color: $color-accent;
+    color: white;
+    font-weight: 600;
+    border-radius: 50%;
+    font-size: 14px;
+  }
+
+  .logout-button__meta {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .logout-button__name {
+    font-weight: 600;
+    font-size: 14px;
+  }
+
+  .logout-button__role {
+    font-size: 12px;
+    opacity: 0.8;
+  }
+
+  .logout-button__arrow {
+    margin-left: auto;
+    font-size: 14px;
+    opacity: 0.7;
+  }
+}
+/* --------------------------------------------------------------
+   Tablet adjustments (optional)
+   -------------------------------------------------------------- */
+@media (max-width: 1024px) {
+  .sidebar-nav {
+    gap: 5px;
+  }
+
+  .sidebar-link {
+    font-size: 14px;
+    padding: 6px 10px;
+  }
+
+  .sidebar-header {
+    padding: 0 15px;
+  }
+
+  .sidebar-footer {
+    margin-left: auto;
+    gap: 8px;
+  }
+
+  .sidebar-footer .sidebar-logout {
+    font-size: 12px;
+    padding: 4px 8px;
+  }
+}
+
+/* --------------------------------------------------------------
+   Accessibility – respect reduced‑motion preference
+   -------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .sidebar,
+  .sidebar-link,
+  .sidebar-logo {
+    transition: none;
+  }
+}
+
+/* --------------------------------------------------------------
+   Dark‑mode support (optional)
+   -------------------------------------------------------------- */
+@media (prefers-color-scheme: dark) {
+  .sidebar {
+    background-color: #1e1e1e;
+    border-right-color: $color-accent;
+  }
+
+  .sidebar-logo,
+  .sidebar-link {
+    color: #e0e0e0;
+  }
+
+  .sidebar-footer {
+    background-color: rgba($color-accent, 0.15);
+  }
+
+  .sidebar-footer .sidebar-logout {
+    color: #e0e0e0;
+
+    &:hover {
+      background-color: rgba($color-danger, 0.15);
+      color: $color-danger;
+    }
+  }
+}

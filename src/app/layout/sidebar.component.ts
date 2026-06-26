@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../core/services/auth.service';
 import { MenuItem } from 'primeng/api';
 import { CommonModule } from '@angular/common';
 import { MenuModule } from 'primeng/menu';
+//import { Profile } from '../../models/profile.model';
 
 @Component({
   selector: 'app-sidebar',
@@ -13,64 +14,11 @@ import { MenuModule } from 'primeng/menu';
     MenuModule,
     CommonModule
   ],
-  template: `
-    <div class="sidebar-menu h-full">
-      <div class="flex items-center p-4 border-b">
-        <div class="flex-shrink-0">
-          <img src="assets/logo.png" alt="Logo" class="h-8 w-8">
-        </div>
-        <div class="ml-3">
-          <span class="font-medium text-gray-900">BarOS POS</span>
-        </div>
-      </div>
-
-      <div class="flex-1 overflow-auto">
-        <ul class="space-y-1 p-4">
-          <li *ngFor="let item of menuItems" class="mb-1">
-            <a
-              [routerLink]="item.routerLink"
-              routerLinkActive="active"
-              [class.active]="isActive(item.routerLink)"
-              class="flex items-center px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-            >
-              <i class="pi {{ item.icon }} mr-3"></i>
-              <span>{{ item.label }}</span>
-            </a>
-          </li>
-        </ul>
-      </div>
-
-      <div class="border-t">
-        <div class="p-4">
-          <button
-            pButton
-            type="button"
-            label="Se déconnecter"
-            icon="pi pi-sign-out"
-            class="w-full"
-            (click)="logout()"
-          ></button>
-        </div>
-      </div>
-    </div>
-  `,
-  styles: [`
-    .sidebar-menu {
-      background-color: white;
-      border-right: 1px solid #e2e8f0;
-      width: 250px;
-    }
-    .active {
-      background-color: #ebf8ff !important;
-      color: #1e40af !important;
-      font-weight: 600;
-    }
-    .active .pi {
-      color: #1e40af !important;
-    }
-  `]
+  templateUrl: './sidebar.component.html',
+  styleUrls: ['./sidebar.component.scss']
 })
 export class SidebarComponent {
+  @Input() collapsed = false;
   menuItems: MenuItem[] = [];
 
   constructor(
@@ -81,8 +29,6 @@ export class SidebarComponent {
   }
 
   private buildMenu(): void {
-    const role = this.auth.role() ?? '';
-
     // Base items that everyone sees (point of sale)
     const baseItems: MenuItem[] = [
       { label: 'Point de vente', icon: 'pi-shopping-cart', routerLink: ['/pos'] }
@@ -104,26 +50,11 @@ export class SidebarComponent {
     // Items specific to admin (user management, settings, admin dashboard)
     const adminItems: MenuItem[] = [
       { label: 'Administration', icon: 'pi-cog', routerLink: ['/admin'] },
-      { label: 'Tableau de bord admin', icon: 'pi-chart-bar', routerLink: ['/admin/dashboard'] },
       { label: 'Utilisateurs', icon: 'pi-user-plus', routerLink: ['/admin/users'] },
-      { label: 'Produits admin', icon: 'pi-box', routerLink: ['/admin/products'] },
-      { label: 'Rapports admin', icon: 'pi-chart-line', routerLink: ['/admin/reports'] },
       { label: 'Paramètres', icon: 'pi-cog', routerLink: ['/admin/settings'] }
     ];
 
-    let items: MenuItem[] = [...baseItems];
-
-    if (['admin', 'gerant', 'caissier'].includes(role)) {
-      items = [...items, ...cashierAndAboveItems];
-    }
-
-    if (['admin', 'gerant'].includes(role)) {
-      items = [...items, ...managerAndAboveItems];
-    }
-
-    if (role === 'admin') {
-      items = [...items, ...adminItems];
-    }
+    let items: MenuItem[] = [...baseItems, ...cashierAndAboveItems, ...managerAndAboveItems, ...adminItems];
 
     this.menuItems = items;
   }
@@ -151,5 +82,42 @@ export class SidebarComponent {
   /** Déconnexion */
   logout(): void {
     this.auth.logout();
+  }
+
+  /** Get current user profile */
+  get profile() {
+    return this.auth.profile();
+  }
+
+  /** Get user's full name */
+  get fullName(): string {
+    const profile = this.profile;
+    if (!profile) return '';
+    return `${profile.prenom} ${profile.nom}`.trim();
+  }
+
+  /** Get user's initials for avatar */
+  get initials(): string {
+    const profile = this.profile;
+    if (!profile) return '?';
+
+    const first = profile.prenom ? profile.prenom[0] : '';
+    const last = profile.nom ? profile.nom[0] : '';
+    return (first + last).toUpperCase() || '?';
+  }
+
+  /** Get user role label in French */
+  get roleLabel(): string {
+    const profile = this.profile;
+    if (!profile) return '';
+
+    const roleMap: Record<string, string> = {
+      'admin': 'Administrateur',
+      'gerant': 'Gérant',
+      'caissier': 'Caissier',
+      'serveur': 'Serveur'
+    };
+
+    return roleMap[profile.role] || profile.role;
   }
 }

@@ -1,0 +1,35 @@
+<div class="sidebar" [class.collapsed]="collapsed">
+  <div class="sidebar-header">
+    <img src="assets/logo.png" alt="Logo" class="sidebar-logo">
+    <span class="sidebar-title">BarOS POS</span>
+  </div>
+
+  <nav class="sidebar-nav">
+    <ul class="sidebar-menu">
+      <li *ngFor="let item of menuItems" class="sidebar-menu-item">
+        <a
+          [routerLink]="item.routerLink"
+          routerLinkActive="active"
+          [class.active]="isActive(item.routerLink)"
+          class="sidebar-link"
+        >
+          <i class="pi {{ item.icon }} sidebar-icon"></i>
+          <span class="sidebar-label">{{ item.label }}</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="sidebar-footer">
+    <button class="sidebar-logout" (click)="logout()">
+      <span class="logout-button__user">
+        <span class="logout-button__avatar">{{ initials }}</span>
+        <span class="logout-button__meta">
+          <span class="logout-button__name">{{ fullName }}</span>
+          <span class="logout-button__role">{{ roleLabel }}</span>
+        </span>
+      </span>
+      <span class="logout-button__arrow">›</span>
+    </button>
+  </div>
+</div>
