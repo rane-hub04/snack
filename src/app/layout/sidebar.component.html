@@ -1,23 +1,63 @@
-<div class="sidebar" [class.collapsed]="collapsed">
-  <div class="sidebar-header">
-    <img src="assets/logo.png" alt="Logo" class="sidebar-logo">
-    <span class="sidebar-title">BarOS POS</span>
+<div class="sidebar-wrapper">
+  <button class="hamburger" [class.active]="sidebarOpen" (click)="toggleSidebar()" aria-label="Basculer la sidebar">
+    <span class="hamburger-line"></span>
+    <span class="hamburger-line"></span>
+    <span class="hamburger-line"></span>
+  </button>
+
+  <div class="sidebar" [class.mobile-open]="sidebarOpen">
+    <div class="sidebar-header">
+      <img src="assets/logo.png" alt="Logo" class="sidebar-logo">
+      <span class="sidebar-title">Bar</span>
+    </div>
+
+    <nav class="sidebar-nav">
+      <ul class="sidebar-menu">
+        <li *ngFor="let item of menuItems" class="sidebar-menu-item">
+          <button
+            *ngIf="itemHasChildren(item)"
+            type="button"
+            class="sidebar-link sidebar-link-group"
+            [class.open]="isSubmenuOpen(item)"
+            (click)="toggleSubmenu(item)"
+          >
+            <i class="pi {{ item.icon }} sidebar-icon"></i>
+            <span class="sidebar-label">{{ item.label }}</span>
+            <i class="pi pi-chevron-down submenu-caret" [class.open]="isSubmenuOpen(item)"></i>
+          </button>
+
+          <a
+            *ngIf="!itemHasChildren(item)"
+            [routerLink]="item.routerLink"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            [class.active]="isActive(item.routerLink)"
+            class="sidebar-link"
+            (click)="closeSidebar()"
+          >
+            <i class="pi {{ item.icon }} sidebar-icon"></i>
+            <span class="sidebar-label">{{ item.label }}</span>
+          </a>
+
+          <ul *ngIf="itemHasChildren(item) && isSubmenuOpen(item)" class="sidebar-submenu">
+            <li *ngFor="let child of item.items" class="sidebar-submenu-item">
+              <a
+                [routerLink]="child.routerLink"
+                routerLinkActive="active"
+                [routerLinkActiveOptions]="{ exact: true }"
+                [class.active]="isActive(child.routerLink)"
+                class="sidebar-link sidebar-submenu-link"
+                (click)="closeSidebar()"
+              >
+                <i class="pi {{ child.icon }} sidebar-icon"></i>
+                <span class="sidebar-label">{{ child.label }}</span>
+              </a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
   </div>
 
-  <nav class="sidebar-nav">
-    <ul class="sidebar-menu">
-      <li *ngFor="let item of menuItems" class="sidebar-menu-item">
-        <a
-          [routerLink]="item.routerLink"
-          routerLinkActive="active"
-          [class.active]="isActive(item.routerLink)"
-          class="sidebar-link"
-        >
-          <i class="pi {{ item.icon }} sidebar-icon"></i>
-          <span class="sidebar-label">{{ item.label }}</span>
-        </a>
-      </li>
-    </ul>
-  </nav>
-
+  <div class="navbar-overlay" [class.active]="sidebarOpen && isMobile()" (click)="closeSidebar()"></div>
 </div>
