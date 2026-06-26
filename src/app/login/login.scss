@@ -8,6 +8,8 @@ $border-color: #ddd;
 $shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 $shadow-hover: 0 8px 25px rgba(0, 0, 0, 0.15);
 
+@use "sass:color";
+
 // Reset & Base Styles
 :host {
   display: flex;
@@ -252,7 +254,7 @@ button {
   color: white;
 
   &:hover {
-    background: linear-gradient(135deg, darken($primary-color, 10%) 0%, darken($secondary-color, 10%) 100%);
+    background: linear-gradient(135deg, color.adjust($primary-color, $lightness: -10%) 0%, color.adjust($secondary-color, $lightness: -10%) 100%);
   }
 }
 
@@ -265,7 +267,7 @@ button {
   margin-top: 0;
 
   &:hover {
-    background: linear-gradient(135deg, darken($secondary-color, 10%) 0%, darken($accent-color, 10%) 100%);
+    background: linear-gradient(135deg, color.adjust($secondary-color, $lightness: -10%) 0%, color.adjust($accent-color, $lightness: -10%) 100%);
   }
 }
 
@@ -277,7 +279,7 @@ button {
   margin-top: 0;
 
   &:hover {
-    background: linear-gradient(135deg, darken($primary-color, 10%) 0%, darken($secondary-color, 10%) 100%);
+    background: linear-gradient(135deg, color.adjust($primary-color, $lightness: -10%) 0%, color.adjust($secondary-color, $lightness: -10%) 100%);
   }
 }
 
