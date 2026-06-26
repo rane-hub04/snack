@@ -51,8 +51,8 @@ $transition-speed: 0.3s ease-in-out;
   transition: justify-content $transition-speed;
 }
 
-/* Logo wrapper (image + text) */
-.sidebar-logo {
+/* Brand wrapper (logo image + text) */
+.brand {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -72,6 +72,18 @@ $transition-speed: 0.3s ease-in-out;
     outline-offset: 4px;
     border-radius: 4px;
   }
+}
+
+/* Image-specific styles */
+.sidebar-logo {
+  display: block;
+  width: 36px;
+  height: auto;
+  border-radius: 4px;
+}
+
+.sidebar-title {
+  line-height: 1;
 }
 
 /* --------------------------------------------------------------
@@ -275,6 +287,7 @@ $transition-speed: 0.3s ease-in-out;
   background: rgba($color-bg, 0.95);
   border-radius: 10px;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.12);
+  transition: left $transition-speed, transform $transition-speed;
 }
 
 .hamburger-line {
@@ -296,6 +309,12 @@ $transition-speed: 0.3s ease-in-out;
 
 .hamburger.active .hamburger-line:nth-child(3) {
   transform: rotate(-45deg) translate(7px, -7px);
+}
+
+/* When sidebar is open on mobile, push hamburger to the right edge of the sidebar
+   so it doesn't overlap the logo. Uses the sidebar width (250px) + 16px offset. */
+.hamburger.active {
+  left: calc(250px + 16px);
 }
 
 .navbar-overlay {
