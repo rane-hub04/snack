@@ -90,9 +90,10 @@ export class AlerteService {
         schema: 'public',
         table: 'alertes'
       }, (payload) => {
-        this._alertes.update(alertes => [payload.new, ...alertes]);
+        const nouvelleAlerte = payload.new as Alerte;
+        this._alertes.update(alertes => [nouvelleAlerte, ...alertes]);
         this._nonLues.set(this._nonLues() + 1);
-        callback(payload.new);
+        callback(nouvelleAlerte);
       })
       .subscribe();
   }

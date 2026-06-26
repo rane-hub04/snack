@@ -141,6 +141,7 @@ import { DateDoualaPipe } from '../shared/pipes/date-douala.pipe';
       </p-card>
     </div>
   `,
+  styleUrls: ['./admin-dashboard.component.scss'],
   styles: [`
     :host {
       display: block;

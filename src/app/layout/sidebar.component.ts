@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../core/services/auth.service';
 import { MenuItem } from 'primeng/api';
 import { CommonModule } from '@angular/common';
@@ -9,6 +9,7 @@ import { MenuModule } from 'primeng/menu';
   selector: 'app-sidebar',
   standalone: true,
   imports: [
+    RouterModule,
     MenuModule,
     CommonModule
   ],
@@ -27,9 +28,9 @@ import { MenuModule } from 'primeng/menu';
         <ul class="space-y-1 p-4">
           <li *ngFor="let item of menuItems" class="mb-1">
             <a
-              [routerLink]="item.route"
+              [routerLink]="item.routerLink"
               routerLinkActive="active"
-              [class.active]="isActive(item.route)"
+              [class.active]="isActive(item.routerLink)"
               class="flex items-center px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-900"
             >
               <i class="pi {{ item.icon }} mr-3"></i>
@@ -70,7 +71,7 @@ import { MenuModule } from 'primeng/menu';
   `]
 })
 export class SidebarComponent {
-  menuItems: any[] = [];
+  menuItems: MenuItem[] = [];
 
   constructor(
     private auth: AuthService,
@@ -80,38 +81,37 @@ export class SidebarComponent {
   }
 
   private buildMenu(): void {
-    const role = this.auth.role();
+    const role = this.auth.role() ?? '';
 
-    // Base items that everyone sees
-    const baseItems = [
-      { label: 'Point de vente', icon: 'pi-shopping-cart', route: ['/pos'] }
+    // Base items that everyone sees (point of sale)
+    const baseItems: MenuItem[] = [
+      { label: 'Point de vente', icon: 'pi-shopping-cart', routerLink: ['/pos'] }
     ];
 
-    // Items for cashier and above
-    const cashierAndAboveItems = [
-      { label: 'Caisse', icon: 'pi-banknote', route: ['/caisse'] }
+    // Items for cashier and above (caisse, etc.)
+    const cashierAndAboveItems: MenuItem[] = [
+      { label: 'Caisse', icon: 'pi-banknote', routerLink: ['/caisse'] }
     ];
 
-    // Items for managers and admins
-    const managerAndAboveItems = [
-      { label: 'Stocks', icon: 'pi-package', route: ['/stock'] },
-      { label: 'Produits', icon: 'pi-tag', route: ['/produits'] },
-      { label: 'Personnel', icon: 'pi-users', route: ['/personnel'] },
-      { label: 'Rapports', icon: 'pi-bar-chart', route: ['/rapports'] }
+    // Items for managers and admins (stock, products, personnel, reports)
+    const managerAndAboveItems: MenuItem[] = [
+      { label: 'Stocks', icon: 'pi-package', routerLink: ['/stock'] },
+      { label: 'Produits', icon: 'pi-tag', routerLink: ['/produits'] },
+      { label: 'Personnel', icon: 'pi-users', routerLink: ['/personnel'] },
+      { label: 'Rapports', icon: 'pi-bar-chart', routerLink: ['/rapports'] }
     ];
 
-    // Items specific to admin
-    const adminItems = [
-      { label: 'Administration', icon: 'pi-cog', route: ['/admin'] },
-      // subitems could be added via nested menu but for simplicity we add top-level items
-      { label: 'Admin Dashboard', icon: 'pi-chart-bar', route: ['/admin/dashboard'] },
-      { label: 'Utilisateurs', icon: 'pi-user-plus', route: ['/admin/users'] },
-      { label: 'Produits', icon: 'pi-box', route: ['/admin/products'] },
-      { label: 'Rapports', icon: 'pi-chart-line', route: ['/admin/reports'] },
-      { label: 'Paramètres', icon: 'pi-cog', route: ['/admin/settings'] }
+    // Items specific to admin (user management, settings, admin dashboard)
+    const adminItems: MenuItem[] = [
+      { label: 'Administration', icon: 'pi-cog', routerLink: ['/admin'] },
+      { label: 'Tableau de bord admin', icon: 'pi-chart-bar', routerLink: ['/admin/dashboard'] },
+      { label: 'Utilisateurs', icon: 'pi-user-plus', routerLink: ['/admin/users'] },
+      { label: 'Produits admin', icon: 'pi-box', routerLink: ['/admin/products'] },
+      { label: 'Rapports admin', icon: 'pi-chart-line', routerLink: ['/admin/reports'] },
+      { label: 'Paramètres', icon: 'pi-cog', routerLink: ['/admin/settings'] }
     ];
 
-    let items = [...baseItems];
+    let items: MenuItem[] = [...baseItems];
 
     if (['admin', 'gerant', 'caissier'].includes(role)) {
       items = [...items, ...cashierAndAboveItems];
@@ -128,15 +128,27 @@ export class SidebarComponent {
     this.menuItems = items;
   }
 
-  isActive(route: any[]): boolean {
-    return this.router.isActive(this.router.createUrlTree(route), {
-      paths: 'subset',
-      queryParams: 'ignored',
-      fragment: 'ignored',
-      matrixParams: 'ignored'
-    });
+  /** Vérifie si la route passée est active (exact match) */
+  isActive(route: any[] | string): boolean {
+    if (Array.isArray(route)) {
+      return this.router.isActive(this.router.createUrlTree(route), {
+        paths: 'subset',
+        queryParams: 'ignored',
+        fragment: 'ignored',
+        matrixParams: 'ignored'
+      });
+    } else {
+      // string route
+      return this.router.isActive(route, {
+        paths: 'exact',
+        queryParams: 'ignored',
+        fragment: 'ignored',
+        matrixParams: 'ignored'
+      });
+    }
   }
 
+  /** Déconnexion */
   logout(): void {
     this.auth.logout();
   }

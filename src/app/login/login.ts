@@ -18,7 +18,9 @@ import { CommonModule } from '@angular/common';
 })
 export class LoginComponent {
   loginForm: FormGroup;
+  registerForm: FormGroup;
   isLoading = false;
+  isRegisterLoading = false;
 
   constructor(
     private fb: FormBuilder,
@@ -31,10 +33,24 @@ export class LoginComponent {
       password: ['', Validators.required],
       remember: [false]
     });
+
+    this.registerForm = this.fb.group({
+      nom: ['', Validators.required],
+      prenom: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
+      role: ['serveur', Validators.required]
+    });
   }
 
   get email() { return this.loginForm.get('email'); }
   get password() { return this.loginForm.get('password'); }
+
+  get registerNom() { return this.registerForm.get('nom'); }
+  get registerPrenom() { return this.registerForm.get('prenom'); }
+  get registerEmail() { return this.registerForm.get('email'); }
+  get registerPassword() { return this.registerForm.get('password'); }
+  get registerRole() { return this.registerForm.get('role'); }
 
   onSubmit(): void {
     if (this.loginForm.invalid) {

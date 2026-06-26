@@ -1,10 +1,14 @@
-import { createClient, SupabaseClient } from '@supabase/supabase-js';
+import { createClient } from '@supabase/supabase-js';
 import { environment } from '../../../environments/environment';
 
-export const supabase = createClient(
-  environment.supabaseUrl,
-  environment.supabaseAnonKey
-);
+const supabaseUrl = environment.supabaseUrl || 'https://your-project-id.supabase.co';
+const supabaseAnonKey = environment.supabaseAnonKey || 'YOUR_SUPABASE_ANON_KEY';
+
+if (!environment.supabaseUrl || !environment.supabaseAnonKey) {
+  console.warn('Supabase environment variables are missing. Set src/environments/environment.ts with your Supabase URL and anon key in production.');
+}
+
+export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 // Define database types
 export interface Database {

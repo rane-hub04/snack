@@ -1,0 +1,7 @@
+:host {
+  --primary-color: #1e40af;
+  --primary-color-dark: #1e3a8a;
+}
+.p-menuitem-link {
+  color: var(--primary-color) !important;
+}
