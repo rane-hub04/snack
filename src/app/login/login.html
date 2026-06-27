@@ -1,29 +1,35 @@
 <div class="container">
   <!-- Login Form -->
   <div class="form-box login">
-    <form action="#">
-      <h1>Login</h1>
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <h1>Connexion</h1>
       <div class="input-box">
-        <input type="text" placeholder="Username" required>
+        <input type="email" placeholder="Email" formControlName="email" required>
         <i class="fa-solid fa-user"></i>
       </div>
       <div class="input-box">
-        <input type="password" placeholder="Password" required>
+        <input type="password" placeholder="Mot de passe" formControlName="password" required>
         <i class="fa-solid fa-lock"></i>
       </div>
       <div class="forget-link">
-        <a href="#">Forget Password?</a>
+        <a href="#">Mot de passe oublié ?</a>
       </div>
-      <button type="submit" class="btn">Login</button>
+      <div class="form-check">
+        <input type="checkbox" formControlName="remember" id="remember-me">
+        <label for="remember-me">Se souvenir de moi</label>
+      </div>
+      <button type="submit" class="btn" [disabled]="loginForm.invalid || isLoading">
+        {{ isLoading ? 'Connexion en cours...' : 'Se connecter' }}
+      </button>
     </form>
   </div>
 
-  <!-- Register Form -->
+  <!-- Register Form (kept for design but not functional) -->
   <div class="form-box register">
     <form action="#">
-      <h1>Registration</h1>
+      <h1>Inscription</h1>
       <div class="input-box">
-        <input type="text" placeholder="Username" required>
+        <input type="text" placeholder="Nom d'utilisateur" required>
         <i class="fa-solid fa-user"></i>
       </div>
       <div class="input-box">
@@ -31,26 +37,26 @@
         <i class="fa-solid fa-envelope"></i>
       </div>
       <div class="input-box">
-        <input type="password" placeholder="Password" required>
+        <input type="password" placeholder="Mot de passe" required>
         <i class="fa-solid fa-lock"></i>
       </div>
-      <button type="submit" class="btn">Register</button>
+      <button type="submit" class="btn">S'inscrire</button>
     </form>
 
     <!-- Toggle Box -->
     <div class="toggle-box"></div>
     <!-- Toggle Box Left -->
     <div class="toggle-pannel toggle-left">
-      <h1>Hello, Welcome</h1>
-      <p>Don't have an account?</p>
-      <button type="button" class="btn-register-btn">Register</button>
+      <h1>Bonjour, Bienvenue</h1>
+      <p>Vous n'avez pas de compte ?</p>
+      <button type="button" class="btn-register-btn">S'inscrire</button>
     </div>
 
     <!-- Toggle Box Right -->
     <div class="toggle-pannel toggle-right">
       <h1>Welcome Back</h1>
-      <p>Already have an account?</p>
-      <button type="button" class="btn-login-btn">Login</button>
+      <p>Vous avez déjà un compte ?</p>
+      <button type="button" class="btn-login-btn">Se connecter</button>
     </div>
   </div>
 </div>

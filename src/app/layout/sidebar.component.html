@@ -1,0 +1,78 @@
+<!-- Conteneur principal de la sidebar -->
+<div class="sidebar-wrapper">
+  <!-- Bouton d'ouverture/fermeture visible uniquement sur mobile -->
+  <button class="hamburger" [class.active]="sidebarOpen" (click)="toggleSidebar()" aria-label="Basculer la sidebar">
+    <span class="hamburger-line"></span>
+    <span class="hamburger-line"></span>
+    <span class="hamburger-line"></span>
+  </button>
+
+  <!-- Panneau latéral principal -->
+  <aside #sidebarRef class="sidebar" [class.mobile-open]="sidebarOpen" [attr.aria-hidden]="!sidebarOpen">
+    <!-- En-tête du panneau -->
+    <header class="sidebar-header">
+      <a class="brand" routerLink="/admin/dashboard" tabindex="0">
+        <img src="assets/logo.png" alt="Logo" class="sidebar-logo">
+        <span class="sidebar-title">Bar</span>
+      </a>
+    </header>
+
+    <!-- Navigation du menu -->
+    <nav class="sidebar-nav" role="navigation" aria-label="Menu principal">
+      <ul class="sidebar-menu" role="menu">
+        <li *ngFor="let item of menuItems; let i = index" class="sidebar-menu-item" role="none">
+          <!-- Élément de menu avec sous-menu -->
+          <ng-container *ngIf="itemHasChildren(item); else simpleItem">
+            <button
+              type="button"
+              class="sidebar-link sidebar-link-group"
+              [class.open]="isSubmenuOpen(item, i)"
+              (click)="toggleSubmenu(item, i)"
+              [attr.aria-expanded]="isSubmenuOpen(item, i)"
+              [attr.aria-controls]="'submenu-' + i"
+              role="menuitem"
+            >
+              <i class="pi {{ item.icon }} sidebar-icon"></i>
+              <span class="sidebar-label">{{ item.label }}</span>
+              <i class="pi pi-chevron-down submenu-caret" [class.open]="isSubmenuOpen(item, i)"></i>
+            </button>
+
+            <ul *ngIf="isSubmenuOpen(item, i)" id="submenu-{{ i }}" class="sidebar-submenu" role="group">
+              <li *ngFor="let child of item.items" class="sidebar-submenu-item">
+                <a
+                  [routerLink]="child.routerLink"
+                  routerLinkActive="active"
+                  [routerLinkActiveOptions]="{ exact: true }"
+                  class="sidebar-link sidebar-submenu-link"
+                  (click)="closeSidebar()"
+                  role="menuitem"
+                >
+                  <i class="pi {{ child.icon }} sidebar-icon"></i>
+                  <span class="sidebar-label">{{ child.label }}</span>
+                </a>
+              </li>
+            </ul>
+          </ng-container>
+
+          <!-- Élément de menu simple -->
+          <ng-template #simpleItem>
+            <a
+              [routerLink]="item.routerLink"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              class="sidebar-link"
+              (click)="closeSidebar()"
+              role="menuitem"
+            >
+              <i class="pi {{ item.icon }} sidebar-icon"></i>
+              <span class="sidebar-label">{{ item.label }}</span>
+            </a>
+          </ng-template>
+        </li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- Masque d'arrière-plan mobile -->
+  <div class="navbar-overlay" [class.active]="sidebarOpen && isMobile()" (click)="closeSidebar()"></div>
+</div>

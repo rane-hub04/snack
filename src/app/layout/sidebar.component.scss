@@ -1,0 +1,367 @@
+﻿/* --------------------------------------------------------------
+   Color variables – harmonized with dashboard dark theme
+   -------------------------------------------------------------- */
+$color-bg: #161b27;
+$color-text: #f0f4ff;
+$color-text-light: #8b96b0;
+$color-accent: #06b6d4;
+$color-accent-light: #7dd3fc;
+$color-overlay: rgba(0, 0, 0, 0.5);
+$color-shadow: rgba(0, 0, 0, 0.24);
+$color-divider: #2a3347;
+
+/* Breakpoints */
+$mobile: 768px;
+
+/* Transitions */
+$transition-speed: 0.3s ease-in-out;
+
+/* --------------------------------------------------------------
+   Layout tokens — coordination avec la navbar fixe de l'app
+   -------------------------------------------------------------- */
+$sidebar-width: 250px;
+$navbar-height: 56px; // doit correspondre à .navbar dans admin-dashboard.component.scss
+
+/* --------------------------------------------------------------
+   Sidebar base
+   La sidebar est fixe sur toute la hauteur de l'écran, à gauche.
+   Elle ne fait plus partie du flux flex du layout : c'est .dashboard
+   (dans admin-dashboard.component.scss) qui se décale de $sidebar-width
+   pour lui laisser la place, via padding-left/margin-left.
+   -------------------------------------------------------------- */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 1000;
+  background-color: $color-bg;
+  box-shadow: 2px 0 12px rgba(0, 0, 0, 0.24);
+  border-right: 1px solid rgba($color-accent, 0.24);
+  width: $sidebar-width;
+  display: flex;
+  flex-direction: column;
+  transition: width $transition-speed;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+/* --------------------------------------------------------------
+   Header / Brand (logo + title)
+   -------------------------------------------------------------- */
+.sidebar-header {
+  flex-shrink: 0;
+  z-index: 1001;
+  height: $navbar-height;
+  padding: 0 20px;
+  border-bottom: 1px solid rgba($color-text, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  transition: justify-content $transition-speed;
+}
+
+/* Brand wrapper (logo image + text) */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: $color-text;
+  font-weight: 700;
+  font-size: 20px;
+  height: 100%;
+  transform: scale(1);
+  transition: transform $transition-speed, color $transition-speed;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+
+  &:focus-visible {
+    outline: 2px solid $color-accent;
+    outline-offset: 4px;
+    border-radius: 4px;
+  }
+}
+
+/* Image-specific styles */
+.sidebar-logo {
+  display: block;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.sidebar-title {
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* --------------------------------------------------------------
+   Navigation Menu (desktop – vertical)
+   -------------------------------------------------------------- */
+.sidebar-nav {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.sidebar-menu {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  gap: 0;
+  margin: 0;
+  padding: 20px 0;
+  align-items: stretch;
+}
+
+.sidebar-menu-item {
+  position: relative;
+  margin: 0;
+  padding: 0;
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: $color-text;
+  font-weight: 500;
+  font-size: 15px;
+  padding: 12px 20px;
+  border-radius: 0;
+  transition: all $transition-speed;
+  position: relative;
+  border: none;
+  background: none;
+  cursor: pointer;
+  justify-content: flex-start;
+  width: 100%;
+
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background-color: $color-accent;
+    transform: scaleY(0);
+    transition: transform $transition-speed;
+  }
+
+  &:hover {
+    color: $color-accent;
+    background-color: rgba($color-accent, 0.08);
+
+    &::after {
+      transform: scaleY(1);
+    }
+  }
+
+  &:focus-visible {
+    outline: 2px solid $color-accent;
+    outline-offset: -2px;
+  }
+
+  &.active {
+    color: $color-accent;
+    background-color: rgba($color-accent, 0.12);
+    font-weight: 600;
+
+    &::after {
+      transform: scaleY(1);
+    }
+  }
+
+  &.sidebar-link-group {
+    justify-content: space-between;
+    background: none;
+  }
+
+  &.open {
+    background: none;
+  }
+
+  .submenu-caret {
+    transition: transform $transition-speed;
+    margin-left: auto;
+    font-size: 0.85rem;
+  }
+
+  .submenu-caret.open {
+    transform: rotate(180deg);
+  }
+}
+
+.sidebar-submenu {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 0 16px;
+}
+
+.sidebar-submenu-item {
+  margin: 0;
+}
+
+.sidebar-submenu-link {
+  padding: 10px 20px;
+  font-size: 14px;
+  color: $color-text-light;
+  width: 100%;
+  justify-content: flex-start;
+}
+
+.sidebar-submenu-link.active {
+  color: $color-accent;
+  font-weight: 600;
+}
+
+/* --------------------------------------------------------------
+   Tablet adjustments (optional)
+   -------------------------------------------------------------- */
+@media (max-width: 1024px) {
+  .sidebar-nav {
+    gap: 5px;
+  }
+
+  .sidebar-link {
+    font-size: 14px;
+    padding: 6px 10px;
+  }
+
+  .sidebar-header {
+    padding: 0 15px;
+  }
+}
+
+/* --------------------------------------------------------------
+   Accessibility – respect reduced‑motion preference
+   -------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .sidebar,
+  .sidebar-link,
+  .sidebar-logo,
+  .hamburger,
+  .hamburger-line {
+    transition: none;
+  }
+}
+
+/* --------------------------------------------------------------
+   Dark‑mode support (optional)
+   -------------------------------------------------------------- */
+@media (prefers-color-scheme: dark) {
+  .sidebar {
+    background-color: $color-bg;
+    border-right: 1px solid rgba($color-accent, 0.24);
+    box-shadow: 2px 0 12px rgba(0, 0, 0, 0.24);
+  }
+
+  .sidebar-header {
+    border-bottom-color: rgba($color-text, 0.08);
+  }
+
+  .brand,
+  .sidebar-title,
+  .sidebar-logo,
+  .sidebar-link,
+  .sidebar-submenu-link {
+    color: #e0e0e0;
+  }
+
+  .sidebar-link:hover,
+  .sidebar-link.active,
+  .sidebar-submenu-link.active {
+    color: $color-accent;
+  }
+
+  .hamburger {
+    background: rgba(30, 30, 30, 0.95);
+  }
+
+  .hamburger-line {
+    background-color: #e0e0e0;
+  }
+}
+
+// ============================================
+// MOBILE SIDEBAR BEHAVIOR
+// ============================================
+
+.sidebar-wrapper {
+  position: relative;
+}
+
+.hamburger {
+  display: none;
+  flex-direction: column;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+  z-index: 1101;
+  gap: 6px;
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  background: rgba($color-bg, 0.95);
+  border-radius: 10px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.12);
+  transition: left $transition-speed, transform $transition-speed;
+}
+
+.hamburger-line {
+  display: block;
+  width: 25px;
+  height: 3px;
+  background-color: $color-text;
+  border-radius: 3px;
+  transition: all $transition-speed;
+}
+
+.hamburger.active .hamburger-line:nth-child(1) {
+  transform: rotate(45deg) translate(10px, 10px);
+}
+
+.hamburger.active .hamburger-line:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger.active .hamburger-line:nth-child(3) {
+  transform: rotate(-45deg) translate(7px, -7px);
+}
+
+/* FIX : le hamburger reste visible et cliquable même quand la sidebar
+   mobile est ouverte (il se transforme juste en croix grâce aux règles
+   ci-dessus). Auparavant "display: none" le faisait disparaître,
+   rendant impossible la fermeture de la sidebar via ce bouton. */
+
+@media (max-width: calc(#{$mobile} - 1px)) {
+  .hamburger {
+    display: flex;
+  }
+
+  .sidebar {
+    left: -$sidebar-width;
+    z-index: 1100;
+    transition: left $transition-speed;
+    box-shadow: 2px 0 12px $color-shadow;
+  }
+
+  .sidebar.mobile-open {
+    left: 0;
+  }
+
+  .sidebar-header {
+    padding: 16px 20px;
+  }
+
+  .sidebar-menu {
+    padding-top: 10px;
+  }
+}

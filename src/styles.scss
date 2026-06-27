@@ -1,1 +1,22 @@
-/* You can add global styles to this file, and also import other style files */
+/* Global styles */
+html, body { margin: 0; padding: 0; }
+/* styles.scss – global reset & base */
+/* Removed remote Google Fonts import to avoid network-dependent build failures. */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  background: #0f1117;
+  color: #f0f4ff;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+}
+
+button { font-family: inherit; }
+input, textarea, select { font-family: inherit; }
