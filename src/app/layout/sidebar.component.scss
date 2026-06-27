@@ -52,7 +52,8 @@ $navbar-height: 56px; // doit correspondre à .navbar dans admin-dashboard.compo
 .sidebar-header {
   flex-shrink: 0;
   z-index: 1001;
-  padding: 20px;
+  height: $navbar-height;
+  padding: 0 20px;
   border-bottom: 1px solid rgba($color-text, 0.08);
   display: flex;
   align-items: center;
@@ -69,6 +70,7 @@ $navbar-height: 56px; // doit correspondre à .navbar dans admin-dashboard.compo
   color: $color-text;
   font-weight: 700;
   font-size: 20px;
+  height: 100%;
   transform: scale(1);
   transition: transform $transition-speed, color $transition-speed;
 
@@ -86,13 +88,16 @@ $navbar-height: 56px; // doit correspondre à .navbar dans admin-dashboard.compo
 /* Image-specific styles */
 .sidebar-logo {
   display: block;
-  width: 36px;
-  height: auto;
-  border-radius: 4px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
 }
 
 .sidebar-title {
   line-height: 1;
+  display: inline-flex;
+  align-items: center;
 }
 
 /* --------------------------------------------------------------
@@ -252,13 +257,13 @@ $navbar-height: 56px; // doit correspondre à .navbar dans admin-dashboard.compo
    -------------------------------------------------------------- */
 @media (prefers-color-scheme: dark) {
   .sidebar {
-    background-color: #1e1e1e;
-    border-right: none;
+    background-color: $color-bg;
+    border-right: 1px solid rgba($color-accent, 0.24);
     box-shadow: 2px 0 12px rgba(0, 0, 0, 0.24);
   }
 
   .sidebar-header {
-    border-bottom-color: rgba(255, 255, 255, 0.08);
+    border-bottom-color: rgba($color-text, 0.08);
   }
 
   .brand,

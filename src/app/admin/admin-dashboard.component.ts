@@ -27,15 +27,8 @@ export class AdminDashboardComponent {
   activeTab = signal<FilterTab>('Toutes');
   searchQuery = signal('');
   selectedOrder = signal<Order | null>(null);
-  activeNav = signal<string>('Admin');
 
   tabs: FilterTab[] = ['Toutes', 'En attente', 'Préparation', 'Prêtes'];
-
-  navItems = [
-    { label: 'Admin', icon: 'grid' },
-    { label: 'Preparation', icon: 'scissors' },
-    { label: 'Order Now', icon: 'shopping-bag' },
-  ];
 
   stats = [
     {

@@ -1,37 +1,5 @@
 <!-- NAVBAR -->
 <header class="navbar">
-  <div class="navbar__brand">
-    <span class="navbar__logo-icon">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-        <path d="M3 11l19-9-9 19-2-8-8-2z"/>
-      </svg>
-    </span>
-    <span class="navbar__brand-name">SnackOrder</span>
-  </div>
-
-  <nav class="navbar__nav">
-    @for (item of navItems; track item.label) {
-      <button
-        class="navbar__nav-item"
-        [class.navbar__nav-item--active]="activeNav() === item.label"
-        (click)="activeNav.set(item.label)"
-      >
-        <span class="navbar__nav-icon">
-          @if (item.icon === 'grid') {
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-          }
-          @if (item.icon === 'scissors') {
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><line x1="20" y1="4" x2="8.12" y2="15.88"/><line x1="14.47" y1="14.48" x2="20" y2="20"/><line x1="8.12" y1="8.12" x2="12" y2="12"/></svg>
-          }
-          @if (item.icon === 'shopping-bag') {
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
-          }
-        </span>
-        {{ item.label }}
-      </button>
-    }
-  </nav>
-
   <div class="navbar__user">
     <div class="navbar__user-info">
       <span class="navbar__user-role">admin Mode</span>
@@ -176,11 +144,7 @@
                 </td>
                 <td class="orders-table__time">{{ order.time }}</td>
                 <td class="orders-table__total">{{ formatTotal(order.total) }}</td>
-                <td class="orders-table__menu">
-                  <button class="btn-icon btn-icon--sm" (click)="$event.stopPropagation()">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg>
-                  </button>
-                </td>
+                <td class="orders-table__menu"></td>
               </tr>
             }
           </tbody>
