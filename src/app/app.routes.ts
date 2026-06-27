@@ -1,7 +1,5 @@
 import { Routes } from '@angular/router';
 import { AdminDashboardComponent } from './admin/admin-dashboard.component';
-import { AdminUsersComponent } from './admin/users.component';
-import { AdminSettingsComponent } from './admin/settings.component';
 import { PosComponent } from './features/pos/pos.component';
 import { CommandeFormComponent } from './features/pos/commande-form/commande-form.component';
 import { MesCommandesComponent } from './features/pos/mes-commandes/mes-commandes.component';
@@ -18,11 +16,15 @@ import { InventaireComponent } from './features/stock/inventaire/inventaire.comp
 import { ProduitsComponent } from './features/produits/produits.component';
 import { PersonnelComponent } from './features/personnel/personnel.component';
 import { RapportsComponent } from './features/rapports/rapports.component';
+import { UsersComponent } from './admin/users.component';
+import { SettingsComponent } from './admin/settings.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/admin/dashboard', pathMatch: 'full' },
   { path: 'admin', redirectTo: '/admin/dashboard', pathMatch: 'full' },
   { path: 'admin/dashboard', component: AdminDashboardComponent },
+  { path: 'admin/users', component: UsersComponent },
+  { path: 'admin/settings', component: SettingsComponent },
   { path: 'pos', component: PosComponent },
   { path: 'pos/commande-form', component: CommandeFormComponent },
   { path: 'pos/mes-commandes', component: MesCommandesComponent },
@@ -39,9 +41,6 @@ export const routes: Routes = [
   { path: 'produits', component: ProduitsComponent },
   { path: 'personnel', component: PersonnelComponent },
   { path: 'rapports', component: RapportsComponent },
-  // Admin sub-routes
-  { path: 'admin/users', component: AdminUsersComponent },
   { path: 'admin/products', redirectTo: '/admin/dashboard', pathMatch: 'full' },
-  { path: 'admin/reports', redirectTo: '/admin/dashboard', pathMatch: 'full' },
-  { path: 'admin/settings', component: AdminSettingsComponent }
+  { path: 'admin/reports', redirectTo: '/admin/dashboard', pathMatch: 'full' }
 ];

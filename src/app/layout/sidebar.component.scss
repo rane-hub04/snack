@@ -1,4 +1,4 @@
-/* --------------------------------------------------------------
+﻿/* --------------------------------------------------------------
    Color variables – match the palette you provided
    -------------------------------------------------------------- */
 $color-bg: #ffffff;
@@ -22,15 +22,14 @@ $transition-speed: 0.3s ease-in-out;
    Sidebar base
    -------------------------------------------------------------- */
 .sidebar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  bottom: 0;
+  position: relative;
   z-index: 1000;
   background-color: $color-bg;
   box-shadow: 2px 0 12px $color-shadow;
   border-right: 3px solid $color-accent;
   width: 250px;
+  min-height: 100vh;
+  flex: 0 0 250px;
   display: flex;
   flex-direction: column;
   transition: width $transition-speed;
@@ -242,7 +241,8 @@ $transition-speed: 0.3s ease-in-out;
 @media (prefers-color-scheme: dark) {
   .sidebar {
     background-color: #1e1e1e;
-    border-right-color: $color-accent;
+    border-right: none;
+    box-shadow: 2px 0 12px rgba(0, 0, 0, 0.24);
   }
 
   .sidebar-logo,
@@ -250,18 +250,7 @@ $transition-speed: 0.3s ease-in-out;
     color: #e0e0e0;
   }
 
-  .sidebar-footer {
-    background-color: rgba($color-accent, 0.15);
-  }
-
-  .sidebar-footer .sidebar-logout {
-    color: #e0e0e0;
-
-    &:hover {
-      background-color: rgba($color-danger, 0.15);
-      color: $color-danger;
-    }
-  }
+  
 }
 
 // ============================================
@@ -317,25 +306,9 @@ $transition-speed: 0.3s ease-in-out;
   display: none;
 }
 
-.navbar-overlay {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: $color-overlay;
-  z-index: 1099;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity $transition-speed;
-}
 
-.navbar-overlay.active {
-  display: block;
-  opacity: 1;
-  pointer-events: auto;
-}
+
+
 
 @media (max-width: calc(#{$mobile} - 1px)) {
   .hamburger {
@@ -357,10 +330,6 @@ $transition-speed: 0.3s ease-in-out;
     left: 0;
   }
 
-  .sidebar.collapsed {
-    width: 60px;
-  }
-
   .sidebar-header {
     padding: 16px 20px;
   }
@@ -369,4 +338,3 @@ $transition-speed: 0.3s ease-in-out;
     padding-top: 10px;
   }
 }
-

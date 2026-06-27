@@ -1,0 +1,186 @@
+<div class="admin-dashboard">
+  <div class="page-inner">
+
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-logo">🍱</span>
+        <span class="brand-name">SnackOrder</span>
+      </div>
+
+      <nav class="topbar-actions">
+        <button class="btn ghost">Admin</button>
+        <button class="btn ghost">Preparation</button>
+        <button class="btn ghost">Order Now</button>
+      </nav>
+
+      <div class="topbar-actions">
+        <div>
+          <div class="brand-name">admin Mode</div>
+          <div class="muted">SnackOrder v1.0</div>
+        </div>
+        <img src="https://i.pravatar.cc/40?img=5" alt="Avatar administrateur" class="brand-logo" />
+      </div>
+    </header>
+
+    <main class="content">
+      <section class="kpi-row">
+        <article class="kpi-card" *ngFor="let stat of statCards">
+          <div class="kpi-top">
+            <div class="kpi-icon" [style.background]="stat.iconBg"> <!-- icon placeholder -->
+              <span class="icon">{{ stat.icon }}</span>
+            </div>
+            <div class="kpi-trend">{{ stat.trend }}</div>
+          </div>
+          <p class="kpi-title">{{ stat.label }}</p>
+          <p class="kpi-value">{{ stat.value }}</p>
+        </article>
+      </section>
+
+      <div class="grid">
+        <div class="left-panel">
+          <section class="card orders-card">
+            <div class="topbar">
+              <div>
+                <h2>Flux des Commandes</h2>
+                <p class="muted">Liste exhaustive des transactions récentes</p>
+              </div>
+              <div class="topbar-actions">
+                <div class="search">
+                  <span class="icon icon-search"></span>
+                  <input
+                    type="text"
+                    placeholder="Rechercher une commande..."
+                    [ngModel]="searchTerm()"
+                    (ngModelChange)="searchTerm.set($event)"
+                  />
+                </div>
+                <button class="btn ghost" aria-label="Filtrer">
+                  <span class="icon icon-filter"></span>
+                  Filtrer
+                </button>
+              </div>
+            </div>
+
+            <div class="orders-tabs">
+              <button *ngFor="let tab of tabs"
+                class="tab"
+                [class.active]="activeTab() === tab.key"
+                (click)="setTab(tab.key)">
+                {{ tab.label }}
+              </button>
+            </div>
+
+            <div class="table-wrapper">
+              <table class="orders-table">
+                <thead>
+                  <tr>
+                    <th>ID Commande</th>
+                    <th>Client</th>
+                    <th>Statut</th>
+                    <th>Employé</th>
+                    <th>Heure</th>
+                    <th>Total</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let order of filteredOrders()"
+                      class="orders-table__row"
+                      [class.orders-table__row--selected]="selectedOrder()?.id === order.id"
+                      (click)="selectOrder(order)">
+                    <td class="orders-table__id">{{ order.id }}</td>
+                    <td>
+                      <div class="client-cell">
+                        <img class="client-cell__avatar" [src]="order.clientAvatar" [alt]="order.clientName" />
+                        <span>{{ order.clientName }}</span>
+                      </div>
+                    </td>
+                    <td>
+                      <span class="status-pill status-pill--{{ order.status }}">{{ statusLabel(order.status) }}</span>
+                    </td>
+                    <td>
+                      <span *ngIf="order.employee" class="employee-cell">
+                        <span class="employee-cell__dot"></span>
+                        {{ order.employee }}
+                      </span>
+                      <span *ngIf="!order.employee" class="employee-cell employee-cell--none">Non assigné</span>
+                    </td>
+                    <td class="orders-table__time">{{ order.time }}</td>
+                    <td class="orders-table__total">{{ order.total | number:'1.2-2' }}€</td>
+                    <td class="orders-table__menu">
+                      <button class="btn ghost" aria-label="Plus d'options" (click)="$event.stopPropagation()">
+                        <span class="icon icon-more"></span>
+                      </button>
+                    </td>
+                  </tr>
+
+                  <tr *ngIf="filteredOrders().length === 0">
+                    <td colspan="7" class="orders-table__empty">
+                      Aucune commande ne correspond à votre recherche.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="table-footer">
+              <span>Affichage de {{ filteredOrders().length }} sur {{ totalOrdersToday }} commandes aujourd'hui</span>
+              <div class="topbar-actions">
+                <button class="btn ghost" disabled>Précédent</button>
+                <button class="btn ghost">Suivant</button>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <aside class="right-panel card">
+          <ng-container *ngIf="!selectedOrder()">
+            <div class="empty-panel">
+              <div class="empty-illustration">
+                <span class="icon icon-bag"></span>
+              </div>
+              <p class="brand-name">Aucune commande sélectionnée</p>
+              <p class="muted">Sélectionnez une ligne du tableau pour voir les détails complets et gérer l'ordre.</p>
+            </div>
+          </ng-container>
+
+          <ng-container *ngIf="selectedOrder() as order">
+            <div>
+              <div class="topbar">
+                <div>
+                  <h3>{{ order.id }}</h3>
+                </div>
+                <button class="btn ghost" (click)="clearSelection()" aria-label="Fermer">
+                  <span class="icon icon-close"></span>
+                </button>
+              </div>
+
+              <div class="client-cell">
+                <img class="client-cell__avatar" [src]="order.clientAvatar" [alt]="order.clientName" />
+                <div>
+                  <p class="brand-name">{{ order.clientName }}</p>
+                  <span class="status-pill status-pill--{{ order.status }}">{{ statusLabel(order.status) }}</span>
+                </div>
+              </div>
+
+              <dl class="detail-panel__meta">
+                <div>
+                  <dt>Employé assigné</dt>
+                  <dd>{{ order.employee || 'Non assigné' }}</dd>
+                </div>
+                <div>
+                  <dt>Heure de commande</dt>
+                  <dd>{{ order.time }}</dd>
+                </div>
+                <div>
+                  <dt>Total</dt>
+                  <dd>{{ order.total | number:'1.2-2' }}€</dd>
+                </div>
+              </dl>
+            </div>
+          </ng-container>
+        </aside>
+      </div>
+    </main>
+  </div>
+</div>

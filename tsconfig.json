@@ -18,11 +18,7 @@
     "importHelpers": true,
     "target": "ES2022",
     "module": "ES2022",
-    "baseUrl": ".",
-    "paths": {
-      "rxjs": ["node_modules/rxjs/dist/types/index.d.ts"],
-      "rxjs/*": ["node_modules/rxjs/dist/types/*"]
-    }
+    "baseUrl": "."
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
