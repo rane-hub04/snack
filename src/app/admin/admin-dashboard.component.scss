@@ -1,3 +1,5 @@
+@use "sass:color";
+
 // ============================================================
 // SNACKORDER – DASHBOARD COMPONENT STYLES
 // Theme : Dark Pro · Accent : Cyan #06b6d4
@@ -609,7 +611,7 @@ $transition-speed-app: 0.3s ease-in-out;
     color: #fff;
     border-color: $cyan;
 
-    &:hover { background: darken($cyan, 6%); }
+    &:hover { background: color.adjust($cyan, $lightness: -6%); }
   }
 
   &--ghost {
