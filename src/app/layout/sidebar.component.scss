@@ -1,16 +1,14 @@
 ﻿/* --------------------------------------------------------------
-   Color variables – match the palette you provided
+   Color variables – harmonized with dashboard dark theme
    -------------------------------------------------------------- */
-$color-bg: #ffffff;
-$color-text: #2c3e50;
-$color-text-light: #7f8c8d;
-$color-accent: #ff9500;
-$color-accent-light: #ffb84d;
-$color-active: #ff9500;
+$color-bg: #161b27;
+$color-text: #f0f4ff;
+$color-text-light: #8b96b0;
+$color-accent: #06b6d4;
+$color-accent-light: #7dd3fc;
 $color-overlay: rgba(0, 0, 0, 0.5);
-$color-shadow: rgba(0, 0, 0, 0.08);
-$color-danger: #e74c3c;
-$color-divider: #ecf0f1;
+$color-shadow: rgba(0, 0, 0, 0.24);
+$color-divider: #2a3347;
 
 /* Breakpoints */
 $mobile: 768px;
@@ -19,21 +17,33 @@ $mobile: 768px;
 $transition-speed: 0.3s ease-in-out;
 
 /* --------------------------------------------------------------
+   Layout tokens — coordination avec la navbar fixe de l'app
+   -------------------------------------------------------------- */
+$sidebar-width: 250px;
+$navbar-height: 56px; // doit correspondre à .navbar dans admin-dashboard.component.scss
+
+/* --------------------------------------------------------------
    Sidebar base
+   La sidebar est fixe sur toute la hauteur de l'écran, à gauche.
+   Elle ne fait plus partie du flux flex du layout : c'est .dashboard
+   (dans admin-dashboard.component.scss) qui se décale de $sidebar-width
+   pour lui laisser la place, via padding-left/margin-left.
    -------------------------------------------------------------- */
 .sidebar {
-  position: relative;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
   z-index: 1000;
   background-color: $color-bg;
-  box-shadow: 2px 0 12px $color-shadow;
-  border-right: 3px solid $color-accent;
-  width: 250px;
-  min-height: 100vh;
-  flex: 0 0 250px;
+  box-shadow: 2px 0 12px rgba(0, 0, 0, 0.24);
+  border-right: 1px solid rgba($color-accent, 0.24);
+  width: $sidebar-width;
   display: flex;
   flex-direction: column;
   transition: width $transition-speed;
   overflow-x: hidden;
+  overflow-y: auto;
 }
 
 /* --------------------------------------------------------------
@@ -43,7 +53,7 @@ $transition-speed: 0.3s ease-in-out;
   flex-shrink: 0;
   z-index: 1001;
   padding: 20px;
-  border-bottom: 1px solid $color-divider;
+  border-bottom: 1px solid rgba($color-text, 0.08);
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -60,7 +70,7 @@ $transition-speed: 0.3s ease-in-out;
   font-weight: 700;
   font-size: 20px;
   transform: scale(1);
-  transition: transform $transition-speed;
+  transition: transform $transition-speed, color $transition-speed;
 
   &:hover {
     transform: scale(1.05);
@@ -125,6 +135,7 @@ $transition-speed: 0.3s ease-in-out;
   background: none;
   cursor: pointer;
   justify-content: flex-start;
+  width: 100%;
 
   &::after {
     content: '';
@@ -221,7 +232,6 @@ $transition-speed: 0.3s ease-in-out;
   .sidebar-header {
     padding: 0 15px;
   }
-
 }
 
 /* --------------------------------------------------------------
@@ -230,7 +240,9 @@ $transition-speed: 0.3s ease-in-out;
 @media (prefers-reduced-motion: reduce) {
   .sidebar,
   .sidebar-link,
-  .sidebar-logo {
+  .sidebar-logo,
+  .hamburger,
+  .hamburger-line {
     transition: none;
   }
 }
@@ -245,12 +257,31 @@ $transition-speed: 0.3s ease-in-out;
     box-shadow: 2px 0 12px rgba(0, 0, 0, 0.24);
   }
 
+  .sidebar-header {
+    border-bottom-color: rgba(255, 255, 255, 0.08);
+  }
+
+  .brand,
+  .sidebar-title,
   .sidebar-logo,
-  .sidebar-link {
+  .sidebar-link,
+  .sidebar-submenu-link {
     color: #e0e0e0;
   }
 
-  
+  .sidebar-link:hover,
+  .sidebar-link.active,
+  .sidebar-submenu-link.active {
+    color: $color-accent;
+  }
+
+  .hamburger {
+    background: rgba(30, 30, 30, 0.95);
+  }
+
+  .hamburger-line {
+    background-color: #e0e0e0;
+  }
 }
 
 // ============================================
@@ -300,15 +331,10 @@ $transition-speed: 0.3s ease-in-out;
   transform: rotate(-45deg) translate(7px, -7px);
 }
 
-/* When sidebar is open on mobile, push hamburger to the right edge of the sidebar
-   so it doesn't overlap the logo. Uses the sidebar width (250px) + 16px offset. */
-.hamburger.active {
-  display: none;
-}
-
-
-
-
+/* FIX : le hamburger reste visible et cliquable même quand la sidebar
+   mobile est ouverte (il se transforme juste en croix grâce aux règles
+   ci-dessus). Auparavant "display: none" le faisait disparaître,
+   rendant impossible la fermeture de la sidebar via ce bouton. */
 
 @media (max-width: calc(#{$mobile} - 1px)) {
   .hamburger {
@@ -316,11 +342,7 @@ $transition-speed: 0.3s ease-in-out;
   }
 
   .sidebar {
-    position: fixed;
-    top: 0;
-    left: -250px;
-    height: 100vh;
-    width: 250px;
+    left: -$sidebar-width;
     z-index: 1100;
     transition: left $transition-speed;
     box-shadow: 2px 0 12px $color-shadow;

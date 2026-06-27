@@ -1,186 +1,249 @@
-<div class="admin-dashboard">
-  <div class="page-inner">
-
-    <header class="topbar">
-      <div class="brand">
-        <span class="brand-logo">🍱</span>
-        <span class="brand-name">SnackOrder</span>
-      </div>
-
-      <nav class="topbar-actions">
-        <button class="btn ghost">Admin</button>
-        <button class="btn ghost">Preparation</button>
-        <button class="btn ghost">Order Now</button>
-      </nav>
-
-      <div class="topbar-actions">
-        <div>
-          <div class="brand-name">admin Mode</div>
-          <div class="muted">SnackOrder v1.0</div>
-        </div>
-        <img src="https://i.pravatar.cc/40?img=5" alt="Avatar administrateur" class="brand-logo" />
-      </div>
-    </header>
-
-    <main class="content">
-      <section class="kpi-row">
-        <article class="kpi-card" *ngFor="let stat of statCards">
-          <div class="kpi-top">
-            <div class="kpi-icon" [style.background]="stat.iconBg"> <!-- icon placeholder -->
-              <span class="icon">{{ stat.icon }}</span>
-            </div>
-            <div class="kpi-trend">{{ stat.trend }}</div>
-          </div>
-          <p class="kpi-title">{{ stat.label }}</p>
-          <p class="kpi-value">{{ stat.value }}</p>
-        </article>
-      </section>
-
-      <div class="grid">
-        <div class="left-panel">
-          <section class="card orders-card">
-            <div class="topbar">
-              <div>
-                <h2>Flux des Commandes</h2>
-                <p class="muted">Liste exhaustive des transactions récentes</p>
-              </div>
-              <div class="topbar-actions">
-                <div class="search">
-                  <span class="icon icon-search"></span>
-                  <input
-                    type="text"
-                    placeholder="Rechercher une commande..."
-                    [ngModel]="searchTerm()"
-                    (ngModelChange)="searchTerm.set($event)"
-                  />
-                </div>
-                <button class="btn ghost" aria-label="Filtrer">
-                  <span class="icon icon-filter"></span>
-                  Filtrer
-                </button>
-              </div>
-            </div>
-
-            <div class="orders-tabs">
-              <button *ngFor="let tab of tabs"
-                class="tab"
-                [class.active]="activeTab() === tab.key"
-                (click)="setTab(tab.key)">
-                {{ tab.label }}
-              </button>
-            </div>
-
-            <div class="table-wrapper">
-              <table class="orders-table">
-                <thead>
-                  <tr>
-                    <th>ID Commande</th>
-                    <th>Client</th>
-                    <th>Statut</th>
-                    <th>Employé</th>
-                    <th>Heure</th>
-                    <th>Total</th>
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let order of filteredOrders()"
-                      class="orders-table__row"
-                      [class.orders-table__row--selected]="selectedOrder()?.id === order.id"
-                      (click)="selectOrder(order)">
-                    <td class="orders-table__id">{{ order.id }}</td>
-                    <td>
-                      <div class="client-cell">
-                        <img class="client-cell__avatar" [src]="order.clientAvatar" [alt]="order.clientName" />
-                        <span>{{ order.clientName }}</span>
-                      </div>
-                    </td>
-                    <td>
-                      <span class="status-pill status-pill--{{ order.status }}">{{ statusLabel(order.status) }}</span>
-                    </td>
-                    <td>
-                      <span *ngIf="order.employee" class="employee-cell">
-                        <span class="employee-cell__dot"></span>
-                        {{ order.employee }}
-                      </span>
-                      <span *ngIf="!order.employee" class="employee-cell employee-cell--none">Non assigné</span>
-                    </td>
-                    <td class="orders-table__time">{{ order.time }}</td>
-                    <td class="orders-table__total">{{ order.total | number:'1.2-2' }}€</td>
-                    <td class="orders-table__menu">
-                      <button class="btn ghost" aria-label="Plus d'options" (click)="$event.stopPropagation()">
-                        <span class="icon icon-more"></span>
-                      </button>
-                    </td>
-                  </tr>
-
-                  <tr *ngIf="filteredOrders().length === 0">
-                    <td colspan="7" class="orders-table__empty">
-                      Aucune commande ne correspond à votre recherche.
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-
-            <div class="table-footer">
-              <span>Affichage de {{ filteredOrders().length }} sur {{ totalOrdersToday }} commandes aujourd'hui</span>
-              <div class="topbar-actions">
-                <button class="btn ghost" disabled>Précédent</button>
-                <button class="btn ghost">Suivant</button>
-              </div>
-            </div>
-          </section>
-        </div>
-
-        <aside class="right-panel card">
-          <ng-container *ngIf="!selectedOrder()">
-            <div class="empty-panel">
-              <div class="empty-illustration">
-                <span class="icon icon-bag"></span>
-              </div>
-              <p class="brand-name">Aucune commande sélectionnée</p>
-              <p class="muted">Sélectionnez une ligne du tableau pour voir les détails complets et gérer l'ordre.</p>
-            </div>
-          </ng-container>
-
-          <ng-container *ngIf="selectedOrder() as order">
-            <div>
-              <div class="topbar">
-                <div>
-                  <h3>{{ order.id }}</h3>
-                </div>
-                <button class="btn ghost" (click)="clearSelection()" aria-label="Fermer">
-                  <span class="icon icon-close"></span>
-                </button>
-              </div>
-
-              <div class="client-cell">
-                <img class="client-cell__avatar" [src]="order.clientAvatar" [alt]="order.clientName" />
-                <div>
-                  <p class="brand-name">{{ order.clientName }}</p>
-                  <span class="status-pill status-pill--{{ order.status }}">{{ statusLabel(order.status) }}</span>
-                </div>
-              </div>
-
-              <dl class="detail-panel__meta">
-                <div>
-                  <dt>Employé assigné</dt>
-                  <dd>{{ order.employee || 'Non assigné' }}</dd>
-                </div>
-                <div>
-                  <dt>Heure de commande</dt>
-                  <dd>{{ order.time }}</dd>
-                </div>
-                <div>
-                  <dt>Total</dt>
-                  <dd>{{ order.total | number:'1.2-2' }}€</dd>
-                </div>
-              </dl>
-            </div>
-          </ng-container>
-        </aside>
-      </div>
-    </main>
+<!-- NAVBAR -->
+<header class="navbar">
+  <div class="navbar__brand">
+    <span class="navbar__logo-icon">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <path d="M3 11l19-9-9 19-2-8-8-2z"/>
+      </svg>
+    </span>
+    <span class="navbar__brand-name">SnackOrder</span>
   </div>
-</div>
+
+  <nav class="navbar__nav">
+    @for (item of navItems; track item.label) {
+      <button
+        class="navbar__nav-item"
+        [class.navbar__nav-item--active]="activeNav() === item.label"
+        (click)="activeNav.set(item.label)"
+      >
+        <span class="navbar__nav-icon">
+          @if (item.icon === 'grid') {
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+          }
+          @if (item.icon === 'scissors') {
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><line x1="20" y1="4" x2="8.12" y2="15.88"/><line x1="14.47" y1="14.48" x2="20" y2="20"/><line x1="8.12" y1="8.12" x2="12" y2="12"/></svg>
+          }
+          @if (item.icon === 'shopping-bag') {
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+          }
+        </span>
+        {{ item.label }}
+      </button>
+    }
+  </nav>
+
+  <div class="navbar__user">
+    <div class="navbar__user-info">
+      <span class="navbar__user-role">admin Mode</span>
+      <span class="navbar__user-app">SnackOrder v1.0</span>
+    </div>
+    <div class="navbar__avatar">
+      <img src="https://i.pravatar.cc/36?img=47" alt="Admin" />
+      <span class="navbar__avatar-dot"></span>
+    </div>
+  </div>
+</header>
+
+<!-- MAIN -->
+<main class="dashboard">
+
+  <!-- PAGE HEADER -->
+  <div class="dashboard__header">
+    <div class="dashboard__title-block">
+      <h1 class="dashboard__title">Tableau de Bord</h1>
+      <p class="dashboard__subtitle">Surveillez et gérez les flux de commandes en temps réel.</p>
+    </div>
+    <div class="dashboard__actions">
+      <button class="btn btn--ghost">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        Exporter Rapport
+      </button>
+      <button class="btn btn--primary">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg>
+        Actualiser
+      </button>
+    </div>
+  </div>
+
+  <!-- STATS CARDS -->
+  <div class="stats-grid">
+    @for (stat of stats; track stat.label) {
+      <div class="stat-card">
+        <div class="stat-card__top">
+          <div class="stat-card__icon" [style.background]="stat.color + '22'" [style.color]="stat.color">
+            @if (stat.icon === 'bag') {
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+            }
+            @if (stat.icon === 'dollar') {
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+            }
+            @if (stat.icon === 'clock') {
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            }
+            @if (stat.icon === 'smile') {
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+            }
+          </div>
+          <span class="stat-card__trend" [class.stat-card__trend--up]="stat.trendUp" [class.stat-card__trend--down]="!stat.trendUp">
+            {{ stat.trendUp ? '↗' : '↘' }} {{ stat.trend }}
+          </span>
+        </div>
+        <div class="stat-card__value">{{ stat.value }}</div>
+        <div class="stat-card__label">{{ stat.label }}</div>
+      </div>
+    }
+  </div>
+
+  <!-- CONTENT AREA -->
+  <div class="content-grid">
+
+    <!-- ORDERS TABLE -->
+    <section class="orders-panel">
+      <div class="orders-panel__head">
+        <div>
+          <h2 class="orders-panel__title">Flux des Commandes</h2>
+          <p class="orders-panel__sub">Liste exhaustive des transactions récentes</p>
+        </div>
+        <div class="orders-panel__controls">
+          <div class="search-box">
+            <svg class="search-box__icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input
+              class="search-box__input"
+              type="text"
+              placeholder="Rechercher une commande..."
+              [ngModel]="searchQuery()"
+              (ngModelChange)="searchQuery.set($event)"
+            />
+          </div>
+          <button class="btn-icon" title="Filtrer">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- TABS -->
+      <div class="tabs">
+        @for (tab of tabs; track tab) {
+          <button
+            class="tabs__item"
+            [class.tabs__item--active]="activeTab() === tab"
+            (click)="setTab(tab)"
+          >{{ tab }}</button>
+        }
+      </div>
+
+      <!-- TABLE -->
+      <div class="table-wrapper">
+        <table class="orders-table">
+          <thead>
+            <tr>
+              <th>ID Commande</th>
+              <th>Client</th>
+              <th>Statut</th>
+              <th>Employé</th>
+              <th>Heure</th>
+              <th>Total</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (order of filteredOrders(); track order.id) {
+              <tr
+                class="orders-table__row"
+                [class.orders-table__row--selected]="selectedOrder()?.id === order.id"
+                (click)="selectOrder(order)"
+              >
+                <td class="orders-table__id">{{ order.id }}</td>
+                <td class="orders-table__client">
+                  <div
+                    class="avatar avatar--sm"
+                    [style.background]="getAvatarColor(order.client)"
+                  >{{ getInitials(order.client) }}</div>
+                  <span>{{ order.client }}</span>
+                </td>
+                <td>
+                  <span class="status-badge" [ngClass]="getStatusClass(order.status)">
+                    {{ order.status }}
+                  </span>
+                </td>
+                <td class="orders-table__employee">
+                  @if (order.employee) {
+                    <span class="employee-dot" [class.employee-dot--online]="order.employeeOnline"></span>
+                    <span>{{ order.employee }}</span>
+                  } @else {
+                    <span class="non-assigne">Non assigné</span>
+                  }
+                </td>
+                <td class="orders-table__time">{{ order.time }}</td>
+                <td class="orders-table__total">{{ formatTotal(order.total) }}</td>
+                <td class="orders-table__menu">
+                  <button class="btn-icon btn-icon--sm" (click)="$event.stopPropagation()">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg>
+                  </button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <!-- PAGINATION -->
+      <div class="pagination">
+        <span class="pagination__info">Affichage de {{ filteredOrders().length }} sur 152 commandes aujourd'hui</span>
+        <div class="pagination__btns">
+          <button class="btn btn--ghost btn--sm" disabled>Précédent</button>
+          <button class="btn btn--outline btn--sm">Suivant</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ORDER DETAIL PANEL -->
+    <aside class="detail-panel">
+      @if (selectedOrder()) {
+        <div class="detail-panel__content">
+          <div class="detail-panel__order-id">{{ selectedOrder()!.id }}</div>
+          <div class="detail-panel__client">
+            <div class="avatar avatar--lg" [style.background]="getAvatarColor(selectedOrder()!.client)">
+              {{ getInitials(selectedOrder()!.client) }}
+            </div>
+            <div>
+              <div class="detail-panel__client-name">{{ selectedOrder()!.client }}</div>
+              <div class="detail-panel__client-sub">Client</div>
+            </div>
+          </div>
+          <div class="detail-panel__meta">
+            <div class="detail-panel__meta-row">
+              <span class="detail-panel__meta-label">Statut</span>
+              <span class="status-badge" [ngClass]="getStatusClass(selectedOrder()!.status)">
+                {{ selectedOrder()!.status }}
+              </span>
+            </div>
+            <div class="detail-panel__meta-row">
+              <span class="detail-panel__meta-label">Heure</span>
+              <span>{{ selectedOrder()!.time }}</span>
+            </div>
+            <div class="detail-panel__meta-row">
+              <span class="detail-panel__meta-label">Employé</span>
+              <span>{{ selectedOrder()!.employee ?? 'Non assigné' }}</span>
+            </div>
+            <div class="detail-panel__meta-row">
+              <span class="detail-panel__meta-label">Total</span>
+              <strong class="detail-panel__total">{{ formatTotal(selectedOrder()!.total) }}</strong>
+            </div>
+          </div>
+          <button class="btn btn--primary btn--full">Gérer l'ordre</button>
+        </div>
+      } @else {
+        <div class="detail-panel__empty">
+          <div class="detail-panel__empty-icon">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+          </div>
+          <p class="detail-panel__empty-title">Aucune commande sélectionnée</p>
+          <p class="detail-panel__empty-sub">Sélectionnez une ligne du tableau pour voir les détails complets et gérer l'ordre.</p>
+        </div>
+      }
+    </aside>
+
+  </div>
+</main>
+
