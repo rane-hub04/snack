@@ -1,10 +1,8 @@
 import { Routes } from '@angular/router';
 import { AdminDashboardComponent } from './admin/admin-dashboard.component';
-import { PosComponent } from './features/pos/pos.component';
-import { CommandeFormComponent } from './features/pos/commande-form/commande-form.component';
-import { MesCommandesComponent } from './features/pos/mes-commandes/mes-commandes.component';
-import { PanierComponent } from './features/pos/panier/panier.component';
-import { TablesGridComponent } from './features/pos/tables-grid/tables-grid.component';
+import { MenuComponent } from './features/gestions/menu/menu.component';
+import { MesCommandesComponent } from './features/gestions/mes-commandes/mes-commandes.component';
+import { GestionDesMenusComponent } from './features/gestions/gestion-des-menus/gestion-des-menus.component';
 import { CaisseComponent } from './features/caisse/caisse.component';
 import { EncaissementComponent } from './features/caisse/encaissement/encaissement.component';
 import { JournalCaisseComponent } from './features/caisse/journal-caisse/journal-caisse.component';
@@ -25,11 +23,9 @@ export const routes: Routes = [
   { path: 'admin/dashboard', component: AdminDashboardComponent },
   { path: 'admin/users', component: UsersComponent },
   { path: 'admin/settings', component: SettingsComponent },
-  { path: 'pos', component: PosComponent },
-  { path: 'pos/commande-form', component: CommandeFormComponent },
-  { path: 'pos/mes-commandes', component: MesCommandesComponent },
-  { path: 'pos/panier', component: PanierComponent },
-  { path: 'pos/tables-grid', component: TablesGridComponent },
+  { path: 'gestions/menu', component: MenuComponent },
+  { path: 'gestions/mes-commandes', component: MesCommandesComponent },
+  { path: 'gestions/gestion-des-menus', component: GestionDesMenusComponent },
   { path: 'caisse', component: CaisseComponent },
   { path: 'caisse/encaissement', component: EncaissementComponent },
   { path: 'caisse/journal-caisse', component: JournalCaisseComponent },
