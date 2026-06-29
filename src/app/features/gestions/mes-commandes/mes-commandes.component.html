@@ -1,0 +1,165 @@
+<!-- NAVBAR -->
+<header class="navbar">
+  <div class="navbar__stats">
+    <span class="navbar__stat">Temps moyen : 8.5 min</span>
+    <span class="navbar__stat navbar__stat--accent">Commandes préparées (H) : 42</span>
+  </div>
+
+  <div class="navbar__user">
+    <div class="navbar__user-info">
+      <span class="navbar__user-role">admin Mode</span>
+      <span class="navbar__user-app">SnackOrder v1.0</span>
+    </div>
+    <div class="navbar__avatar">
+      <img src="https://i.pravatar.cc/36?img=47" alt="Admin" />
+      <span class="navbar__avatar-dot"></span>
+    </div>
+  </div>
+</header>
+
+<!-- MAIN -->
+<main class="prep">
+
+  <!-- PAGE HEADER -->
+  <div class="prep__header">
+    <div class="prep__title-block">
+      <h1 class="prep__title">Préparation Cuisine</h1>
+      <p class="prep__subtitle">Suivez les commandes à préparer et gardez le service fluide.</p>
+      <span class="badge-count">{{ activeOrdersCount() }} Commandes Actives</span>
+    </div>
+
+    <div class="prep__controls">
+      <div class="search-box">
+        <svg class="search-box__icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input
+          class="search-box__input"
+          type="text"
+          placeholder="Chercher commande..."
+          [ngModel]="searchQuery()"
+          (ngModelChange)="searchQuery.set($event)"
+        />
+      </div>
+
+      <button
+        class="filter-pill"
+        [class.filter-pill--active]="!urgentOnly()"
+        (click)="setUrgentOnly(false)"
+      >Tout</button>
+
+      <button
+        class="filter-pill"
+        [class.filter-pill--active]="urgentOnly()"
+        (click)="setUrgentOnly(true)"
+      >
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        Urgences
+      </button>
+
+      <button
+        class="filter-pill"
+        (click)="setSortMode(sortMode() === 'recent' ? 'oldest' : 'recent')"
+      >
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 11 12 6 7 11"/><polyline points="17 18 12 13 7 18"/></svg>
+        Plus anciens
+      </button>
+    </div>
+
+  </div>
+
+  <!-- STOCK ALERT BANNER -->
+  @if (!stockAlertDismissed()) {
+    <div class="stock-alert">
+      <span class="stock-alert__text">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+        Rupture de stock imminente :
+        @for (item of stockAlertItems; track item; let last = $last) {
+          <strong>&quot;{{ item }}&quot;</strong>@if (!last) {<span> &amp; </span>}
+        }
+      </span>
+      <button class="stock-alert__action" (click)="dismissStockAlert()">Mettre à jour</button>
+    </div>
+  }
+
+  <!-- ORDERS GRID -->
+  <div class="orders-grid">
+    @for (order of filteredOrders(); track order.id) {
+      <article class="order-card" [class.order-card--active]="order.started">
+
+        <div class="order-card__head">
+          <span class="priority-badge" [ngClass]="'priority-badge--' + order.priority">
+            {{ priorityLabel(order.priority) }}
+          </span>
+          <span class="order-card__eta" [class.order-card__eta--soft]="order.priority !== 'high'">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            {{ order.etaMinutes }} min
+          </span>
+        </div>
+
+        <div class="order-card__id">{{ order.id }}</div>
+        <div class="order-card__client">{{ order.client }}</div>
+
+        <ul class="order-card__items">
+          @for (item of order.items; track item.id) {
+            <li class="order-item">
+              <button
+                type="button"
+                class="order-item__checkbox"
+                [class.order-item__checkbox--checked]="item.checked"
+                (click)="toggleItem(order, item)"
+                [attr.aria-pressed]="item.checked"
+                [attr.aria-label]="'Marquer ' + item.name + ' comme prêt'"
+              >
+                @if (item.checked) {
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                }
+              </button>
+              <div class="order-item__body">
+                <span class="order-item__name" [class.order-item__name--checked]="item.checked">
+                  <strong>{{ item.qty }}x</strong>{{ item.name }}
+                </span>
+                @if (item.note) {
+                  <span class="order-item__note">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                    {{ item.note }}
+                  </span>
+                }
+              </div>
+            </li>
+          }
+        </ul>
+
+        <div class="order-card__footer">
+          @if (order.started) {
+            <button
+              class="order-card__main-action order-card__main-action--ready"
+              [disabled]="!allItemsChecked(order)"
+              (click)="markReady(order)"
+            >
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="16 9 11 14 8 11"/></svg>
+              Marquer Prêt
+            </button>
+          } @else {
+            <button class="order-card__main-action order-card__main-action--start" (click)="startOrder(order)">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"/></svg>
+              Démarrer
+            </button>
+          }
+          <button class="order-card__sub-action">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            Indisponible / Remplacer
+          </button>
+        </div>
+      </article>
+    }
+
+    @if (filteredOrders().length === 0) {
+      <div class="empty-slot">
+        <div class="empty-slot__icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
+        </div>
+        <p class="empty-slot__title">En attente de commandes...</p>
+        <p class="empty-slot__sub">Le flux de commandes clients s'affichera ici en temps réel.</p>
+      </div>
+    }
+  </div>
+</main>

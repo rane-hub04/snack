@@ -1,0 +1,658 @@
+@use "sass:color";
+
+// ============================================================
+// SNACKORDER – DASHBOARD COMPONENT STYLES
+// Theme : Dark Pro · Accent : Cyan #06b6d4
+// ============================================================
+
+// ── TOKENS ──────────────────────────────────────────────────
+$bg-base      : #0f1117;
+$bg-surface   : #161b27;
+$bg-elevated  : #1e2536;
+$bg-hover     : #242c3d;
+
+$border       : #2a3347;
+$border-light : #323d54;
+
+$text-primary : #f0f4ff;
+$text-secondary: #8b96b0;
+$text-muted   : #59637a;
+
+$cyan         : #06b6d4;
+$cyan-dim     : rgba(#06b6d4, .12);
+$amber        : #f59e0b;
+$green        : #10b981;
+$red          : #f43f5e;
+$purple       : #8b5cf6;
+
+$radius-sm    : 6px;
+$radius-md    : 10px;
+$radius-lg    : 14px;
+
+$font-sans    : 'Inter', system-ui, sans-serif;
+
+// ── LAYOUT TOKENS ──────────────────────────────────────────────
+$navbar-height: 56px;
+$sidebar-width: 250px; // doit correspondre à $sidebar-width dans sidebar.component.scss
+$mobile: 768px;        // doit correspondre à $mobile dans sidebar.component.scss
+$transition-speed-app: 0.3s ease-in-out;
+
+// ── RESET HOST ───────────────────────────────────────────────
+// La page scrolle normalement (une seule scrollbar, celle du
+// navigateur). La navbar reste visible pendant le scroll grâce
+// à position:fixed (elle sort du flux, donc n'a pas besoin que
+// .dashboard ait son propre scroll interne.
+:host {
+  display: block;
+  min-height: 100vh;
+  background: transparent;
+  font-family: $font-sans;
+  color: $text-primary;
+  font-size: 14px;
+}
+
+// ============================================================
+// NAVBAR — fixe en haut, démarre après la sidebar
+// ============================================================
+.navbar {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 0 24px;
+  height: $navbar-height;
+  flex-shrink: 0;
+  background: $bg-surface;
+  border-bottom: 1px solid $border;
+  position: fixed;
+  top: 0;
+  left: $sidebar-width;
+  right: 0;
+  z-index: 100;
+  box-sizing: border-box;
+  transition: left $transition-speed-app;
+
+  @media (max-width: calc(#{$mobile} - 1px)) {
+    left: 0;
+  }
+
+  &__brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    color: $text-primary;
+    font-weight: 700;
+    font-size: 17px;
+    letter-spacing: -.3px;
+    flex-shrink: 0;
+  }
+
+  &__logo-icon {
+    width: 32px;
+    height: 32px;
+    background: $cyan;
+    border-radius: $radius-sm;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+  }
+
+  &__brand-name { color: $text-primary; }
+
+  &__user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: auto;
+  }
+
+  &__user-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+  }
+
+  &__user-role { font-size: 12.5px; font-weight: 600; color: $text-primary; }
+  &__user-app  { font-size: 11px; color: $text-muted; }
+
+  &__avatar {
+    position: relative;
+    width: 36px;
+    height: 36px;
+
+    img {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      object-fit: cover;
+      display: block;
+    }
+  }
+
+  &__avatar-dot {
+    position: absolute;
+    bottom: 1px;
+    right: 1px;
+    width: 9px;
+    height: 9px;
+    background: $green;
+    border-radius: 50%;
+    border: 2px solid $bg-surface;
+  }
+}
+
+// ============================================================
+// DASHBOARD LAYOUT
+// ============================================================
+.dashboard {
+  padding: calc(#{$navbar-height} + 20px) 10px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-width: 1400px;
+  width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+
+  // ── Page Header ──────────────────────────────────────────
+  &__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  &__title {
+    margin: 0 0 4px;
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: -.5px;
+    color: $text-primary;
+  }
+
+  &__subtitle {
+    margin: 0;
+    font-size: 13.5px;
+    color: $text-secondary;
+  }
+
+  &__actions {
+    display: flex;
+    gap: 10px;
+    flex-shrink: 0;
+  }
+}
+
+// ============================================================
+// STAT CARDS
+// ============================================================
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+
+  @media (max-width: 300px) { grid-template-columns: repeat(2, 1fr); }
+  @media (max-width: 150px) { grid-template-columns: 1fr; }
+}
+
+.stat-card {
+  background: $bg-surface;
+  border: 1px solid $border;
+  border-radius: $radius-lg;
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  transition: border-color .15s;
+
+  &:hover { border-color: $border-light; }
+
+  &__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 4px;
+  }
+
+  &__icon {
+    width: 40px;
+    height: 40px;
+    border-radius: $radius-sm;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__trend {
+    font-size: 12px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 999px;
+
+    &--up   { background: rgba($green, .12); color: $green; }
+    &--down { background: rgba($red, .12);   color: $red;   }
+  }
+
+  &__value {
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: -.5px;
+    color: $text-primary;
+    line-height: 1;
+    margin-top: 4px;
+  }
+
+  &__label {
+    font-size: 12.5px;
+    color: $text-secondary;
+    margin-top: 2px;
+  }
+}
+
+// ============================================================
+// CONTENT GRID
+// ============================================================
+.content-grid {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 10px;
+  align-items: start;
+
+  @media (max-width: 1024px) { grid-template-columns: 1fr; }
+}
+
+// ============================================================
+// ORDERS PANEL
+// ============================================================
+.orders-panel {
+  background: $bg-surface;
+  border: 1px solid $border;
+  border-radius: $radius-lg;
+  overflow: hidden;
+  min-width: 0; // empêche le tableau (white-space:nowrap) de forcer la grille à déborder
+
+  &__head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 20px 20px 0;
+  }
+
+  &__title {
+    margin: 0 0 3px;
+    font-size: 15.5px;
+    font-weight: 700;
+    color: $text-primary;
+  }
+
+  &__sub {
+    margin: 0;
+    font-size: 12.5px;
+    color: $text-secondary;
+  }
+
+  &__controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+}
+
+// Search box
+.search-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  &__icon {
+    position: absolute;
+    left: 10px;
+    color: $text-muted;
+    pointer-events: none;
+  }
+
+  &__input {
+    background: $bg-elevated;
+    border: 1px solid $border;
+    border-radius: $radius-sm;
+    color: $text-primary;
+    font-size: 13px;
+    padding: 7px 12px 7px 32px;
+    width: 230px;
+    outline: none;
+    transition: border-color .15s;
+
+    &::placeholder { color: $text-muted; }
+    &:focus { border-color: $cyan; }
+  }
+}
+
+// ── TABS ─────────────────────────────────────────────────────
+.tabs {
+  display: flex;
+  gap: 0;
+  padding: 16px 20px 0;
+  border-bottom: 1px solid $border;
+
+  &__item {
+    padding: 8px 16px;
+    font-size: 13px;
+    font-weight: 500;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: $text-secondary;
+    cursor: pointer;
+    margin-bottom: -1px;
+    transition: color .15s, border-color .15s;
+
+    &:hover { color: $text-primary; }
+
+    &--active {
+      color: $cyan;
+      border-bottom-color: $cyan;
+      font-weight: 600;
+    }
+  }
+}
+
+// ── TABLE ─────────────────────────────────────────────────────
+.table-wrapper { overflow-x: auto; }
+
+.orders-table {
+  width: 100%;
+  border-collapse: collapse;
+
+  thead tr {
+    background: $bg-base;
+  }
+
+  th {
+    padding: 10px 16px;
+    text-align: left;
+    font-size: 11.5px;
+    font-weight: 600;
+    color: $text-muted;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    white-space: nowrap;
+    border-bottom: 1px solid $border;
+  }
+
+  td {
+    padding: 14px 16px;
+    vertical-align: middle;
+    border-bottom: 1px solid $border;
+    white-space: nowrap;
+  }
+
+  &__row {
+    cursor: pointer;
+    transition: background .12s;
+
+    &:hover { background: $bg-hover; }
+    &:last-child td { border-bottom: none; }
+
+    &--selected { background: rgba($cyan, .06); }
+  }
+
+  &__id { font-size: 13px; font-weight: 600; color: $text-primary; }
+
+  &__client {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+    color: $text-primary;
+  }
+
+  &__employee {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: $text-secondary;
+    font-size: 13px;
+  }
+
+  &__time  { color: $text-secondary; font-size: 13px; }
+  &__total { font-weight: 700; color: $text-primary; font-size: 13.5px; }
+  &__menu  { text-align: right; }
+}
+
+// ── STATUS BADGES ─────────────────────────────────────────────
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  border-radius: $radius-sm;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+
+  &.status--prep      { background: rgba($cyan, .12);   color: $cyan;   border: 1px solid rgba($cyan, .2); }
+  &.status--waiting   { background: rgba($amber, .12);  color: $amber;  border: 1px solid rgba($amber, .2); }
+  &.status--ready     { background: rgba($green, .12);  color: $green;  border: 1px solid rgba($green, .2); }
+  &.status--delivered { background: rgba($purple, .12); color: $purple; border: 1px solid rgba($purple, .2); }
+  &.status--cancelled { background: rgba($red, .12);    color: $red;    border: 1px solid rgba($red, .2); }
+}
+
+// ── EMPLOYEE DOT ─────────────────────────────────────────────
+.employee-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: $text-muted;
+  flex-shrink: 0;
+
+  &--online { background: $green; }
+}
+
+.non-assigne {
+  color: $red;
+  font-style: italic;
+  font-size: 12.5px;
+  font-weight: 500;
+}
+
+// ── PAGINATION ────────────────────────────────────────────────
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  border-top: 1px solid $border;
+
+  &__info { font-size: 12.5px; color: $text-muted; }
+  &__btns { display: flex; gap: 8px; }
+}
+
+// ============================================================
+// DETAIL PANEL
+// ============================================================
+.detail-panel {
+  background: $bg-surface;
+  border: 1px solid $border;
+  border-radius: $radius-lg;
+  min-height: 380px;
+  display: flex;
+  align-items: stretch;
+
+  &__empty {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 24px;
+    text-align: center;
+    gap: 10px;
+  }
+
+  &__empty-icon {
+    width: 64px;
+    height: 64px;
+    background: $bg-elevated;
+    border: 1px dashed $border-light;
+    border-radius: $radius-md;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $text-muted;
+    margin-bottom: 8px;
+  }
+
+  &__empty-title {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 700;
+    color: $text-primary;
+  }
+
+  &__empty-sub {
+    margin: 0;
+    font-size: 12.5px;
+    color: $text-secondary;
+    line-height: 1.6;
+  }
+
+  &__content {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+  }
+
+  &__order-id {
+    font-size: 13px;
+    font-weight: 700;
+    color: $cyan;
+    font-family: monospace;
+    letter-spacing: .5px;
+  }
+
+  &__client {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  &__client-name {
+    font-size: 15px;
+    font-weight: 700;
+    color: $text-primary;
+  }
+
+  &__client-sub {
+    font-size: 12px;
+    color: $text-muted;
+    margin-top: 2px;
+  }
+
+  &__meta { display: flex; flex-direction: column; gap: 12px; }
+
+  &__meta-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 13px;
+  }
+
+  &__meta-label { color: $text-muted; font-size: 12px; }
+
+  &__total {
+    font-size: 18px;
+    font-weight: 800;
+    color: $text-primary;
+  }
+}
+
+// ============================================================
+// AVATAR
+// ============================================================
+.avatar {
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: #fff;
+  text-transform: uppercase;
+  flex-shrink: 0;
+  font-size: 11px;
+  letter-spacing: .5px;
+
+  &--sm { width: 30px; height: 30px; font-size: 10px; }
+  &--lg { width: 44px; height: 44px; font-size: 14px; }
+}
+
+// ============================================================
+// BUTTONS
+// ============================================================
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 16px;
+  border-radius: $radius-sm;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: background .15s, border-color .15s, opacity .15s;
+  white-space: nowrap;
+
+  &--primary {
+    background: $cyan;
+    color: #fff;
+    border-color: $cyan;
+
+    &:hover { background: color.adjust($cyan, $lightness: -6%); }
+  }
+
+  &--ghost {
+    background: transparent;
+    color: $text-secondary;
+    border-color: $border-light;
+
+    &:hover { background: $bg-elevated; color: $text-primary; }
+  }
+
+  &--outline {
+    background: transparent;
+    color: $text-primary;
+    border-color: $border-light;
+
+    &:hover { background: $bg-elevated; }
+  }
+
+  &--sm { padding: 6px 12px; font-size: 12.5px; }
+  &--full { width: 100%; justify-content: center; }
+
+  &:disabled {
+    opacity: .4;
+    cursor: not-allowed;
+  }
+}
+
+.btn-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: $radius-sm;
+  border: 1px solid $border-light;
+  background: $bg-elevated;
+  color: $text-secondary;
+  cursor: pointer;
+  transition: background .15s, color .15s;
+
+  &:hover { background: $bg-hover; color: $text-primary; }
+
+  &--sm { width: 26px; height: 26px; border: none; background: transparent; }
+}

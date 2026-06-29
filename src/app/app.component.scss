@@ -1,0 +1,43 @@
+$sidebar-width: 250px;
+
+:host {
+  display: block;
+  height: 100vh;
+  overflow: hidden; // empêche tout scroll de page qui désynchroniserait sidebar/contenu
+}
+
+.app-root {
+  display: flex;
+  align-items: stretch; // force la sidebar à matcher la hauteur du flex container
+  height: 100vh;         // hauteur FIXE (pas min-height) : la sidebar ne dépendra plus du contenu
+  background: #0f1318;
+  overflow: hidden;
+}
+
+.app-main {
+  flex: 1 1 auto;
+  height: 100vh;     // même hauteur fixe que .app-root
+  overflow-y: auto;  // c'est ICI que le contenu (table, footer...) scrolle, pas la page
+  padding: 24px;
+  box-sizing: border-box;
+  background: transparent;
+  margin-left: $sidebar-width;
+  width: auto;
+  min-width: 0;
+}
+
+@media (max-width: 767px) {
+  .app-root {
+    flex-direction: column;
+    height: auto;       // sur mobile la sidebar devient un drawer en position fixed,
+    min-height: 100vh;   // donc ici on peut redevenir flexible sans casser le desktop
+    overflow: visible;
+  }
+
+  .app-main {
+    height: auto;
+    margin-left: 0;
+    width: 100%;
+    padding: 16px;
+  }
+}
