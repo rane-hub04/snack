@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+﻿import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-login',
@@ -6,5 +6,13 @@ import { Component } from '@angular/core';
   styleUrls: ['./login.scss']
 })
 export class LoginComponent {
+  loginActive = false;
 
+  showLogin(): void {
+    this.loginActive = true;
+  }
+
+  showRegister(): void {
+    this.loginActive = false;
+  }
 }
