@@ -1,14 +1,10 @@
-<<<<<<< HEAD
+﻿
 ﻿import { Component } from '@angular/core';
-=======
-import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../core/services/auth.service';
 import { Router } from '@angular/router';
 import { ToastService } from '../core/services/toast.service';
-import { ReactiveFormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
->>>>>>> 6423d381f0d176079484b545e7f16da436a9b35d
 
 @Component({
   selector: 'app-login',
@@ -21,18 +17,7 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./login.scss']
 })
 export class LoginComponent {
-<<<<<<< HEAD
   loginActive = false;
-
-  showLogin(): void {
-    this.loginActive = true;
-  }
-
-  showRegister(): void {
-    this.loginActive = false;
-  }
-}
-=======
   loginForm: FormGroup;
   registerForm: FormGroup;
   isLoading = false;
@@ -57,6 +42,14 @@ export class LoginComponent {
       password: ['', [Validators.required, Validators.minLength(6)]],
       role: ['serveur', Validators.required]
     });
+  }
+
+  showLogin(): void {
+    this.loginActive = true;
+  }
+
+  showRegister(): void {
+    this.loginActive = false;
   }
 
   get email() { return this.loginForm.get('email'); }
@@ -94,4 +87,3 @@ export class LoginComponent {
       });
   }
 }
->>>>>>> 6423d381f0d176079484b545e7f16da436a9b35d

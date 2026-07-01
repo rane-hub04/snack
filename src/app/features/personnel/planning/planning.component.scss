@@ -1,0 +1,506 @@
+//to style the main container of the planning component//
+.planning-container {
+    background: transparent;
+  padding: 2rem;
+  min-height: calc(100vh - 80px);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+//to style the header of the planning component//
+  .planning-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 3px solid #2c3e50;
+//to style the header title in the planning component//
+    h2 {
+      color: #2c3e50;
+      margin: 0;
+      font-size: 1.8rem;
+    }
+//to style the add button in the planning header//
+    .btn-add {
+      background: linear-gradient(135deg, #050814 0%, #060140 100%);
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+//to style the add button when hovered//
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 16px rgba(102, 126, 234, 0.4);
+      }
+//to style the add button when clicked//
+      &:active {
+        transform: translateY(0);
+      }
+    }
+  }
+//to style the add employee section//
+  .add-employee-section {
+    margin-bottom: 2rem;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    border-left: 5px solid #080b18;
+    animation: slideDown 0.3s ease;
+//to style the header of the add employee form//
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+//to style the header of the add employee form//
+    .add-employee-form {
+//to style the header of the add employee form//
+      .form-header {
+        background: transparent;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid #0c0d17;
+//to style the header of the add employee form//
+        h3 {
+          color: #2c3e50;
+          margin: 0;
+          font-size: 1.3rem;
+        }
+//to style the close button in the add employee form//
+        .btn-close {
+          background: transparent;
+          color: white;
+          border: none;
+          width: 32px;
+          height: 32px;
+          border-radius: 50%;
+          cursor: pointer;
+          font-size: 1.2rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: all 0.2s ease;
+//to style the close button when hovered//
+          &:hover {
+            background: #c0392b;
+            transform: scale(1.1);
+          }
+        }
+      }
+//to style the form group in the add employee form//
+      .form-group {
+        margin-bottom: 1.5rem;
+//to style the label in the add employee form//
+        label {
+          display: block;
+          font-weight: 600;
+          color: #2c3e50;
+          margin-bottom: 0.5rem;
+        }
+//to style the input fields in the add employee form//
+        input[type="text"] {
+          width: 100%;
+          padding: 0.75rem;
+          border: 2px solid #bdc3c7;
+          border-radius: 6px;
+          font-size: 0.95rem;
+          transition: all 0.2s ease;
+//to style the input field when focused//
+          &:focus {
+            outline: none;
+            border-color: #983ab7;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+          }
+        }
+      }
+//to style the schedule section in the add employee form//
+      .form-schedule {
+        margin-top: 2rem;
+//to style the schedule section in the add employee form//
+        h4 {
+          color: #34495e;
+          margin-top: 0;
+          margin-bottom: 1rem;
+          font-weight: 600;
+        }
+//to style the schedule grid in the add employee form//
+        .form-schedule-grid {
+          display: flex;
+          flex-direction: column;
+          gap: 0.5rem;
+//to style the schedule header in the add employee form//
+          .schedule-header {
+            display: grid;
+            grid-template-columns: 120px 1fr 1fr;
+            gap: 1rem;
+            padding: 1rem;
+            background: #050814;
+            color: white;
+            border-radius: 8px;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+//to style the day and time columns in the add employee form//
+            .day-column,
+            .time-column {
+              text-align: center;
+            }
+          }
+//to style the schedule rows in the add employee form//
+          .schedule-row {
+            display: grid;
+            grid-template-columns: 120px 1fr 1fr;
+            gap: 1rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 6px;
+            align-items: center;
+            transition: all 0.2s ease;
+//to style the schedule row when hovered//
+            &:hover {
+              background: #ecf0f1;
+            }
+//to style the day cell in the add employee form//
+            .day-cell {
+              font-weight: 600;
+              color: #2c3e50;
+            }
+//to style the time input fields in the add employee form//
+            .time-cell {
+              display: flex;
+              justify-content: center;
+//to style the time input fields in the add employee form//
+              .time-input {
+                padding: 0.75rem;
+                border: 2px solid #bdc3c7;
+                border-radius: 6px;
+                font-size: 0.95rem;
+                text-align: center;
+                width: 100%;
+                transition: all 0.2s ease;
+                cursor: pointer;
+//to style the time input when focused//
+                &:focus {
+                  outline: none;
+                  border-color: #667eea;
+                  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+                }
+//to style the time input when disabled//
+                &:disabled {
+                  background: #ecf0f1;
+                  color: #95a5a6;
+                  cursor: not-allowed;
+                }
+              }
+            }
+          }
+        }
+      }
+//to style the action buttons (save and cancel) in the add employee form//
+      .form-actions {
+        display: flex;
+        gap: 1rem;
+        margin-top: 2rem;
+        justify-content: flex-end;
+//to style the save button in the add employee form//
+        .btn-save {
+          background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+          color: white;
+          border: none;
+          padding: 0.75rem 2rem;
+          border-radius: 8px;
+          cursor: pointer;
+          font-weight: 600;
+          transition: all 0.3s ease;
+
+          &:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(39, 174, 96, 0.3);
+          }
+        }
+//to style the cancel button in the add employee form//
+        .btn-cancel {
+          background: #ecf0f1;
+          color: #2c3e50;
+          border: 2px solid #bdc3c7;
+          padding: 0.75rem 2rem;
+          border-radius: 8px;
+          cursor: pointer;
+          font-weight: 600;
+          transition: all 0.3s ease;
+
+          &:hover {
+            background: #bdc3c7;
+            color: white;
+          }
+        }
+      }
+    }
+  }
+//to style the main layout of the planning component//
+  .planning-layout {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 2rem;
+//to style the employees list section//
+    .employees-list {
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      height: fit-content;
+      position: sticky;
+      top: 2rem;
+//to style the header of the employees list//
+      h3 {
+        color: #2c3e50;
+        margin-top: 0;
+        margin-bottom: 1rem;
+        font-size: 1.1rem;
+        border-bottom: 2px solid #ecf0f1;
+        padding-bottom: 0.5rem;
+      }
+//to style the list of employee items//
+      .employee-items {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+//to style each employee item in the list//
+        .employee-item {
+          padding: 1rem;
+          background: #f8f9fa;
+          border-left: 4px solid #bdc3c7;
+          border-radius: 6px;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          position: relative;
+//to style the employee item when hovered//
+          &:hover {
+            background: #ecf0f1;
+            border-left-color: #667eea;
+            transform: translateX(4px);
+          }
+//to style the employee item when active//
+          &.active {
+            background: #010f44;
+            color: white;
+            border-left-color: #030e14;
+//to style the employee name text when active//
+            .employee-name {
+              color: white;
+            }
+            //to style the employee position text when active//
+            .employee-position {
+              color: rgba(255, 255, 255, 0.9);
+            }
+          }
+//to style the employee name text//
+          .employee-name {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 0.25rem;
+          }
+//to style the employee position text//
+          .employee-position {
+            font-size: 0.85rem;
+            color: #7f8c8d;
+          }
+//to style the delete button for each employee item//
+          .btn-delete {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: #ed1a03;
+            color: white;
+            border: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            opacity: 0;
+            transition: all 0.2s ease;
+//to style the delete button when hovered//
+            &:hover {
+              background: #c0392b;
+              transform: scale(1.1);
+            }
+          }
+//to show the delete button when the employee item is hovered//
+          &:hover .btn-delete {
+            opacity: 1;
+          }
+        }
+      }
+    }
+//to style the schedule section in the planning layout//
+    .schedule-section {
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+//to style the header of the selected employee in the schedule section//
+      .selected-employee-header {
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid #ecf0f1;
+//to style the selected employee name in the schedule section//
+        h3 {
+          color: #2c3e50;
+          margin: 0;
+          font-size: 1.3rem;
+        }
+      }
+//to style the schedule table wrapper in the schedule section//
+      .schedule-table-wrapper {
+//to style the schedule grid in the schedule section//
+        .schedule-grid {
+          display: flex;
+          flex-direction: column;
+          gap: 0.5rem;
+//to style the schedule header and rows//
+          .schedule-header {
+            display: grid;
+            grid-template-columns: 120px 1fr 1fr;
+            gap: 1rem;
+            padding: 1rem;
+            background: #050814;
+            color: white;
+            border-radius: 8px;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+//to style the day and time columns in the schedule header//
+            .day-column,
+            .time-column {
+              text-align: center;
+            }
+          }
+//to style the schedule rows in the schedule grid//
+          .schedule-row {
+            display: grid;
+            grid-template-columns: 120px 1fr 1fr;
+            gap: 1rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 6px;
+            align-items: center;
+            transition: all 0.3s ease;
+//to style the schedule row when hovered//
+            &:hover {
+              background: #ecf0f1;
+            }
+//to style the day cell in the schedule row//
+            .day-cell {
+              font-weight: 600;
+              color: #2c3e50;
+            }
+//to style the time cell in the schedule row//
+            .time-cell {
+              display: flex;
+              justify-content: center;
+//to style the time input fields in the schedule row//
+              .time-input {
+                padding: 0.75rem;
+                border: 2px solid #bdc3c7;
+                border-radius: 6px;
+                font-size: 0.95rem;
+                text-align: center;
+                width: 100%;
+                transition: all 0.3s ease;
+                cursor: pointer;
+//to style the time input when focused//
+                &:focus {
+                  outline: none;
+                  border-color: #667eea;
+                  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+                }
+//to style the time input when disabled//
+                &:disabled {
+                  background: #ecf0f1;
+                  color: #95a5a6;
+                  cursor: not-allowed;
+                }
+              }
+            }
+          }
+        }
+      }
+//to style the select prompt when no employee is selected//
+      .select-prompt {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 400px;
+        color: #7f8c8d;
+        font-size: 1.1rem;
+        text-align: center;
+
+        p {
+          margin: 0;
+        }
+      }
+    }
+  }
+//to style the responsive behavior of the planning component layout//
+  @media (max-width: 1200px) {
+    .planning-layout {
+      grid-template-columns: 1fr;
+//to style the employees list section in responsive mode//
+      .employees-list {
+        position: relative;
+        top: auto;
+      }
+    }
+  }
+//to style the responsive behavior of the planning component layout for smaller screens//
+  @media (max-width: 768px) {
+    padding: 1rem;
+//to style the planning header in responsive mode//
+    .planning-header {
+      flex-direction: column;
+      gap: 1rem;
+      align-items: flex-start;
+//to style the header title in responsive mode//
+      h2 {
+        font-size: 1.4rem;
+      }
+//to style the add button in responsive mode//
+      .btn-add {
+        width: 100%;
+      }
+    }
+//to style the planning layout in responsive mode//
+    .planning-layout {
+        //to style the schedule section in responsive mode//
+      .schedule-section {
+        //to style the schedule table wrapper in responsive mode//
+        .schedule-grid,
+        //to style the schedule header and rows in responsive mode//
+        .form-schedule-grid {
+            //to style the schedule header and rows in responsive mode//
+          .schedule-header,
+    //to style the schedule header and rows in responsive mode//
+          .schedule-row {
+            //to style the schedule header and rows in responsive mode//
+            grid-template-columns: 80px 1fr 1fr;
+            gap: 0.5rem;
+            padding: 0.75rem;
+//to style the day and time columns in responsive mode//
+            .day-column {
+              font-size: 0.9rem;
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,162 @@
+<!-- Conteneur principal du planning -->
+<div class="planning-container">
+  <!-- En-tête avec titre et bouton d'ajout -->
+  <div class="planning-header">
+    <h2>Planning Hebdomadaire</h2>
+    <!-- Bouton pour ouvrir le formulaire d'ajout (caché si le formulaire est déjà affiché) -->
+    <button class="btn-add" (click)="openAddForm()" *ngIf="!showAddForm">+ Ajouter un employé</button>
+  </div>
+
+  <!-- Layout principal : liste d'employés + planning -->
+  <div class="planning-layout">
+    <!-- Section 1 : Liste des employés -->
+    <div class="employees-list">
+      <h3>Employés</h3>
+      <div class="employee-items">
+        <!-- Boucle sur la liste des employés -->
+        <div 
+          *ngFor="let employee of employees" 
+          class="employee-item" 
+          [class.active]="selectedEmployee?.id === employee.id"
+          (click)="selectEmployee(employee)">
+          <!-- Nom de l'employé -->
+          <div class="employee-name">{{ employee.name }}</div>
+          <!-- Poste de l'employé -->
+          <div class="employee-position">{{ employee.position }}</div>
+          <!-- Bouton de suppression de l'employé -->
+          <button 
+            class="btn-delete" 
+            (click)="deleteEmployee(employee.id); $event.stopPropagation()">
+            ✕
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 2 : Affichage du planning hebdomadaire -->
+    <div class="schedule-section">
+      <!-- Affichage du planning si un employé est sélectionné -->
+      <div *ngIf="selectedEmployee; else selectPrompt" class="schedule-table-wrapper">
+        <!-- En-tête avec le nom et le poste de l'employé sélectionné -->
+        <div class="selected-employee-header">
+          <h3>{{ selectedEmployee.name }} - {{ selectedEmployee.position }}</h3>
+        </div>
+        
+        <!-- Grille de planning hebdomadaire -->
+        <div class="schedule-grid">
+          <!-- En-tête : Jour, Heure d'arrivée, Heure de départ -->
+          <div class="schedule-header">
+            <div class="day-column">Jour</div>
+            <div class="time-column">Heure d'arrivée</div>
+            <div class="time-column">Heure de départ</div>
+          </div>
+
+          <!-- Boucle sur chaque jour de la semaine pour afficher le planning -->
+          <div *ngFor="let day of weekDays" class="schedule-row">
+            <div class="day-cell">{{ day }}</div>
+            <!-- Récupère le planning du jour et l'utilise pour l'affichage -->
+            <ng-container *ngIf="getScheduleForDay(selectedEmployee, day) as schedule">
+              <div class="time-cell">
+                <!-- Input pour modifier l'heure d'arrivée -->
+                <input 
+                  type="time" 
+                  [value]="schedule.startTime"
+                  (change)="onTimeChange(schedule, 'startTime', $event)"
+                  [disabled]="schedule.startTime === 'OFF'"
+                  class="time-input">
+              </div>
+              <div class="time-cell">
+                <!-- Input pour modifier l'heure de départ -->
+                <input 
+                  type="time" 
+                  [value]="schedule.endTime"
+                  (change)="onTimeChange(schedule, 'endTime', $event)"
+                  [disabled]="schedule.endTime === 'OFF'"
+                  class="time-input">
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+
+      <!-- Message d'invite si aucun employé n'est sélectionné -->
+      <ng-template #selectPrompt>
+        <div class="select-prompt">
+          <p>Sélectionnez un employé pour voir son planning</p>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+
+  <!-- Section du formulaire d'ajout d'employé (affichée en bas si showAddForm = true) -->
+  <div *ngIf="showAddForm" class="add-employee-section">
+    <div class="add-employee-form">
+      <!-- En-tête du formulaire avec titre et bouton de fermeture -->
+      <div class="form-header">
+        <h3>Ajouter un nouvel employé</h3>
+        <button class="btn-close" (click)="cancelAdd()">✕</button>
+      </div>
+      
+      <!-- Champ de saisie du nom de l'employé -->
+      <div class="form-group">
+        <label>Nom</label>
+        <input 
+          type="text" 
+          [(ngModel)]="newEmployee.name"
+          placeholder="Nom complet">
+      </div>
+
+      <!-- Champ de saisie du poste/fonction -->
+      <div class="form-group">
+        <label>Poste</label>
+        <input 
+          type="text" 
+          [(ngModel)]="newEmployee.position"
+          placeholder="Poste / Fonction">
+      </div>
+
+      <!-- Section pour définir les horaires de travail pour chaque jour -->
+      <div class="form-schedule">
+        <h4>Horaires</h4>
+        <div class="form-schedule-grid">
+          <!-- En-tête du tableau : Jour, Heure d'arrivée, Heure de départ -->
+          <div class="schedule-header">
+            <div class="day-column">Jour</div>
+            <div class="time-column">Arrivée</div>
+            <div class="time-column">Départ</div>
+          </div>
+
+          <!-- Boucle sur chaque jour de la semaine pour créer les champs d'horaires -->
+          <!-- Vérification que schedules existe et contient des éléments avant d'afficher -->
+          <ng-container *ngIf="newEmployee.schedules && newEmployee.schedules.length > 0">
+            <div *ngFor="let day of weekDays; let i = index" class="schedule-row">
+              <div class="day-cell">{{ day }}</div>
+              <div class="time-cell">
+                <!-- Input pour l'heure d'arrivée -->
+                <input 
+                  type="time" 
+                  [(ngModel)]="newEmployee.schedules![i].startTime"
+                  class="time-input">
+              </div>
+              <div class="time-cell">
+                <!-- Input pour l'heure de départ -->
+                <input 
+                  type="time" 
+                  [(ngModel)]="newEmployee.schedules![i].endTime"
+                  class="time-input">
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+
+      <!-- Boutons d'action du formulaire -->
+      <div class="form-actions">
+        <!-- Bouton pour sauvegarder le nouvel employé -->
+        <button class="btn-save" (click)="saveEmployee()">Sauvegarder</button>
+        <!-- Bouton pour annuler et fermer le formulaire -->
+        <button class="btn-cancel" (click)="cancelAdd()">Annuler</button>
+      </div>
+    </div>
+  </div>
+</div>
