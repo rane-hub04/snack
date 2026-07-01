@@ -1,0 +1,221 @@
+// ==========================================
+// STYLES NAVBAR PERSONNEL
+// ==========================================
+// Variables de couleur et ombre
+$primary-gradient:#161b27;
+$text-white: #ffffff;
+$shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+// ==========================================
+// .personnel-navbar : Barre de navigation fixée en haut
+// ==========================================
+// Cette navbar est FIXÉE (position: fixed) en haut de la page
+// et occupe toute la largeur du viewport (width: 100%, left: 0)
+// Elle reste visible lors du scroll vertical
+// z-index: 200 = couche supérieure (reste au-dessus du contenu)
+// height: 70px = hauteur standard de la navbar
+.personnel-navbar {
+  background: $primary-gradient;
+  box-shadow: $shadow;
+  
+  // Position fixée en haut de la page
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;  // Prend toute la largeur de l'écran
+  height: 56px;
+  
+  // Couche supérieure pour rester au-dessus du contenu
+  z-index: 200;  // Nombres seuls, pas d'unité pour z-index
+
+  // ==========================================
+  // .navbar-container : Conteneur de la navbar
+  // ==========================================
+  // Flex layout pour placer brand à gauche, menu à droite
+  // height: 70px = correspond à la navbar parent
+  .navbar-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 70px;
+    padding: 0 20px;
+    max-width: 100%;
+
+    @media (max-width: 768px) {
+      height: 60px;
+      padding: 0 15px;
+    }
+
+    @media (max-width: 480px) {
+      height: 55px;
+      padding: 0 10px;
+    }
+  }
+
+  // ==========================================
+  // .navbar-brand : Logo/Titre de la navbar
+  // ==========================================
+  // Occupe l'espace disponible à gauche (flex: 1)
+  .navbar-brand {
+    flex: 1;
+
+    h1 {
+      margin: 0;
+      color: $text-white;
+      font-size: 24px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+
+      @media (max-width: 480px) {
+        font-size: 18px;
+      }
+    }
+  }
+
+  // ==========================================
+  // .navbar-menu : Menu de navigation principal
+  // ==========================================
+  // Sur desktop : flex horizontal avec gap entre éléments
+  // Sur mobile : menu vertical dropdown (max-height transition)
+  .navbar-menu {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 5px;
+    align-items: center;
+
+    @media (max-width: 768px) {
+      flex-direction: column;
+      position: absolute;
+      top: 70px;  // Positionnement juste sous la navbar
+      left: 0;
+      width: 100%;  // Prend toute la largeur (full-width dropdown)
+      background: $primary-gradient;
+      max-height: 0;  // Menu fermé par défaut
+      overflow: hidden;  // Masque le contenu au-delà
+      transition: max-height 0.3s ease-in-out;  // Smooth animation
+      gap: 0;
+
+      // Classe 'active' appliquée quand le menu mobile est ouvert
+      &.active {
+        max-height: 300px;  // Affiche le contenu du menu
+      }
+    }
+
+    li {
+      display: flex;
+      align-items: center;
+
+      @media (max-width: 768px) {
+        width: 100%;
+
+        a {
+          padding: 15px 20px;
+          width: 100%;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+          &:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+          }
+        }
+      }
+    }
+  }
+
+  // ==========================================
+  // .navbar-link : Lien de navigation
+  // ==========================================
+  // Lien avec padding et transition pour effet de survol
+  .navbar-link {
+    color: $text-white;
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    font-size: 14px;
+    font-weight: 500;
+    white-space: nowrap;
+
+    @media (max-width: 768px) {
+      white-space: normal;
+      padding: 15px 20px;
+    }
+
+    // Effet au survol : légère teinte blanche + petite élévation
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.15);
+      transform: translateY(-2px);  // Petite élévation
+    }
+
+    // Effet au clic : retour à la position normale
+    &:active {
+      transform: translateY(0);
+    }
+  }
+
+  // ==========================================
+  // .menu-toggle : Bouton hamburger menu (mobile)
+  // ==========================================
+  // Bouton visible seulement sur mobile (max-width: 768px)
+  // Animation des 3 barres en X quand active
+  .menu-toggle {
+    display: none;  // Caché sur desktop
+    flex-direction: column;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    gap: 5px;
+
+    @media (max-width: 768px) {
+      display: flex;  // Affiché sur mobile
+    }
+
+    // Les 3 barres du menu hamburger
+    span {
+      width: 25px;
+      height: 3px;
+      background-color: $text-white;
+      border-radius: 2px;
+      transition: all 0.3s ease;
+    }
+
+    // Animation pour transformer en X quand active
+    &.active {
+      span:nth-child(1) {
+        transform: rotate(45deg) translate(10px, 10px);  // Barre du haut devient /
+      }
+
+      span:nth-child(2) {
+        opacity: 0;  // Barre du milieu disparaît
+      }
+
+      span:nth-child(3) {
+        transform: rotate(-45deg) translate(7px, -7px);  // Barre du bas devient \
+      }
+    }
+  }
+}
+
+// ==========================================
+// .personnel-content : Conteneur du contenu principal
+// ==========================================
+// margin-top: 70px = crée l'espace pour la navbar fixée en haut
+// Ainsi le contenu ne sera pas caché sous la navbar
+.personnel-content {
+  margin-top: 70px;  // Espace pour ne pas chevauchement avec navbar fixée
+  min-height: calc(100vh - 70px);
+  background-color: #f8f9fa;
+  padding: 20px;
+
+  @media (max-width: 768px) {
+    min-height: calc(100vh - 60px);
+    padding: 15px;
+  }
+
+  @media (max-width: 480px) {
+    min-height: calc(100vh - 55px);
+    padding: 10px;
+  }
+}

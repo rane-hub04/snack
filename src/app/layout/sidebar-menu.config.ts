@@ -5,11 +5,9 @@ export const SIDEBAR_MENU: MenuItem[] = [
     label: 'Point de vente',
     icon: 'pi-shopping-cart',
     items: [
-      { label: 'Vue POS', icon: 'pi-desktop', routerLink: ['/pos'] },
-      { label: 'Commande', icon: 'pi-shopping-basket', routerLink: ['/pos/commande-form'] },
-      { label: 'Mes commandes', icon: 'pi-list', routerLink: ['/pos/mes-commandes'] },
-      { label: 'Panier', icon: 'pi-shopping-cart', routerLink: ['/pos/panier'] },
-      { label: 'Tables', icon: 'pi-table', routerLink: ['/pos/tables-grid'] }
+      { label: 'Menu', icon: 'pi-shopping-basket', routerLink: ['/gestions/menu'] },
+      { label: 'Mes commandes', icon: 'pi-list', routerLink: ['/gestions/mes-commandes'] },
+      { label: 'Gestion des menus', icon: 'pi-shopping-cart', routerLink: ['/gestions/gestion-des-menus'] }
     ]
   },
   {

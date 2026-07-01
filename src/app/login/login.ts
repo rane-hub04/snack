@@ -1,10 +1,10 @@
-import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+﻿
+﻿import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../core/services/auth.service';
 import { Router } from '@angular/router';
 import { ToastService } from '../core/services/toast.service';
-import { ReactiveFormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-login',
@@ -17,6 +17,7 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./login.scss']
 })
 export class LoginComponent {
+  loginActive = false;
   loginForm: FormGroup;
   registerForm: FormGroup;
   isLoading = false;
@@ -41,6 +42,14 @@ export class LoginComponent {
       password: ['', [Validators.required, Validators.minLength(6)]],
       role: ['serveur', Validators.required]
     });
+  }
+
+  showLogin(): void {
+    this.loginActive = true;
+  }
+
+  showRegister(): void {
+    this.loginActive = false;
   }
 
   get email() { return this.loginForm.get('email'); }

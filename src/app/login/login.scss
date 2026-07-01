@@ -1,1 +1,238 @@
+
+* {
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:host {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+  background: linear-gradient(135deg, #eef4ff 0%, #d9e7ff 100%);
+}
+
+.container {
+  position: relative;
+  width: 100%;
+  max-width: 900px;
+  min-height: 560px;
+  background: #ffffff;
+  border-radius: 32px;
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.15);
+  overflow: hidden;
+}
+
+.message-panel,
+.form-panel {
+  position: absolute;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  padding: 56px 42px;
+  transition: all 0.7s ease;
+}
+
+.message-panel {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #ffffff;
+  background: linear-gradient(180deg, #5c65a0 0%, #1895c2 100%);
+}
+
+.message-panel .content {
+  max-width: 320px;
+}
+
+.message-panel h1 {
+  font-size: 2.4rem;
+  margin-bottom: 18px;
+}
+
+.message-panel p {
+  color: rgba(255, 255, 255, 0.85);
+  margin-bottom: 28px;
+  line-height: 1.6;
+}
+
+.message-panel.left-panel {
+  left: 0;
+  text-align: left;
+}
+
+.message-panel.right-panel {
+  right: -50%;
+  text-align: right;
+}
+
+.form-panel {
+  background: #f7f9ff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.form-panel form {
+  width: 100%;
+  max-width: 360px;
+}
+
+.form-panel h1 {
+  font-size: 2rem;
+  margin-bottom: 32px;
+  color: #102a43;
+}
+
+.input-box {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.input-box input,
+.input-box select {
+  width: 100%;
+  padding: 18px 20px;
+  padding-right: 54px;
+  border: 1px solid #dbe4f0;
+  border-radius: 16px;
+  background: #ffffff;
+  color: #0f172a;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.input-box select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  cursor: pointer;
+}
+
+.input-box input:focus,
+.input-box select:focus {
+  border-color: #5b8def;
+  box-shadow: 0 0 0 4px rgba(93, 141, 239, 0.15);
+}
+
+.input-box i {
+  position: absolute;
+  right: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #6b7280;
+  font-size: 1.1rem;
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+  font-style: normal;
+}
+
+.forget-link {
+  margin-bottom: 28px;
+}
+
+.forget-link a {
+  color: #3b6ef4;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.forget-link a:hover {
+  text-decoration: underline;
+}
+
+.btn {
+  width: 100%;
+  padding: 18px;
+  margin-top: 6px;
+  border: none;
+  border-radius: 16px;
+  background: #2553f6;
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+  background: #1c43d2;
+}
+
+.btn.transparent {
+  width: auto;
+  padding: 12px 26px;
+  border: 2px solid rgba(255, 255, 255, 0.95);
+  background: transparent;
+  color: #ffffff;
+}
+
+.btn.transparent:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.container.login-active .message-panel.left-panel {
+  left: -50%;
+}
+
+.container.login-active .message-panel.right-panel {
+  right: 0;
+}
+
+.container.login-active .register-panel {
+  right: -50%;
+}
+
+.container.login-active .login-panel {
+  left: 0;
+}
+
+.register-panel {
+  right: 0;
+}
+
+.login-panel {
+  left: 100%;
+}
+
+@media (max-width: 860px) {
+  .container {
+    min-height: auto;
+    border-radius: 24px;
+  }
+
+  .message-panel,
+  .form-panel {
+    width: 100%;
+    position: relative;
+    left: 0;
+    right: 0;
+    height: auto;
+    padding: 32px 28px;
+  }
+
+  .message-panel.right-panel {
+    right: 0;
+  }
+
+  .form-panel.login-panel,
+  .form-panel.register-panel {
+    left: 0;
+  }
+
+  .container.login-active .message-panel.left-panel {
+    left: 0;
+  }
+
+  .container.login-active .register-panel,
+  .container.login-active .login-panel {
+    left: 0;
+  }
+}
+
 /* Styles spécifiques au composant de connexion */

@@ -1,0 +1,83 @@
+<!-- NAVBAR -->
+<header class="navbar">
+  <div class="navbar__spacer"></div>
+  <div class="navbar__avatar">
+    <img [src]="currentUser.avatarUrl" [alt]="currentUser.name" />
+    @if (currentUser.online) {
+      <span class="navbar__avatar-dot"></span>
+    }
+  </div>
+</header>
+
+<!-- MAIN -->
+<main class="menus">
+
+  <!-- PAGE HEADER -->
+  <div class="menus__header">
+    <div class="menus__title-block">
+      <h1 class="menus__title">Gestion des Menus</h1>
+      <p class="menus__subtitle">Visualisation rapide des offres actuelles</p>
+    </div>
+
+    <div class="menus__controls">
+      <div class="search-box">
+        <svg class="search-box__icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input
+          class="search-box__input"
+          type="text"
+          placeholder="Rechercher un menu, un SKU ou un article..."
+          [ngModel]="searchQuery()"
+          (ngModelChange)="searchQuery.set($event)"
+        />
+      </div>
+
+      <button class="btn btn--dark" (click)="importCsv()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        Importer CSV
+      </button>
+
+      <button class="btn btn--primary" (click)="createNewMenu()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Nouveau menu
+      </button>
+    </div>
+  </div>
+
+  <!-- MENUS GRID -->
+  <div class="menus-grid">
+    @for (item of filteredMenuItems(); track item.id) {
+      <article class="menu-card">
+        <div class="menu-card__image-wrap">
+          <img class="menu-card__image" [src]="item.imageUrl" [alt]="item.name" />
+          <span class="status-badge" [ngClass]="'status-badge--' + item.status">
+            {{ statusLabel(item.status) }}
+          </span>
+          <span class="price-badge">{{ formatPrice(item.price) }}</span>
+        </div>
+
+        <div class="menu-card__body">
+          <h2 class="menu-card__name">{{ item.name }}</h2>
+          <p class="menu-card__desc">{{ item.description }}</p>
+        </div>
+
+        <div class="menu-card__footer">
+          <button class="btn btn--ghost btn--sm" (click)="editMenu(item)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.85 2.83 0 114 4L7.5 20.5 2 22l1.5-5.5z"/></svg>
+            Éditer
+          </button>
+          <button class="btn btn--accent btn--sm" (click)="submitMenu(item)">
+            Soumettre
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </button>
+        </div>
+      </article>
+    }
+
+    @if (filteredMenuItems().length === 0) {
+      <div class="empty-state">
+        <p class="empty-state__title">Aucun menu trouvé</p>
+        <p class="empty-state__sub">Essayez une autre recherche ou créez un nouveau menu.</p>
+      </div>
+    }
+  </div>
+</main>

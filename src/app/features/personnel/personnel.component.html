@@ -1,0 +1,36 @@
+<!-- Barre de navigation pour le module Personnel -->
+<nav class="personnel-navbar">
+  <div class="navbar-container">
+    <!-- Branding : titre du module Personnel -->
+    <div class="navbar-brand">
+      <h1>Personel</h1>
+    </div>
+    
+    <!-- Bouton d'activation/désactivation du menu responsive (mobile) -->
+    <!-- La classe 'active' est appliquée quand menuOpen = true -->
+    <button class="menu-toggle" [class.active]="menuOpen" (click)="toggleMenu()">
+      <!-- Trois barres pour l'icône hamburger menu -->
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    
+    <!-- Menu de navigation principal -->
+    <!-- La classe 'active' affiche le menu sur mobile quand menuOpen = true -->
+    <ul class="navbar-menu" [class.active]="menuOpen">
+      <!-- Boucle sur chaque module disponible dans le personnel -->
+      <li *ngFor="let module of modules">
+        <!-- Lien de navigation vers le sous-module (routing nested) -->
+        <!-- closeMenu() est appelé pour fermer le menu après la navigation -->
+        <a class="navbar-link" [routerLink]="module.route" (click)="closeMenu()">{{ module.name }}</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Conteneur principal du contenu Personnel -->
+<div class="personnel-content">
+  <!-- Outlet de routing : affiche le composant de la route enfant sélectionnée -->
+  <!-- (Planning, Pointage et Paie, Poste et Certification, Communication, Conformité RCH) -->
+  <router-outlet></router-outlet>
+</div>

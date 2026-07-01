@@ -1,0 +1,175 @@
+
+
+<div class="pos-layout">
+
+  <!-- ═══════════════════════════════════════════════════════════
+       LEFT COLUMN — Product catalog
+       ═══════════════════════════════════════════════════════════ -->
+  <div class="pos-catalog">
+
+    <!-- Section header -->
+    <header class="catalog-header">
+      <div class="catalog-header__text">
+        <h1 class="catalog-title">{{ categoryLabel }}</h1>
+        <p class="catalog-subtitle">Discover our specialties prepared with passion.</p>
+      </div>
+
+      <div class="catalog-filters" role="group" aria-label="Filter products">
+        @for (f of filters; track f.key) {
+          <button
+            class="filter-chip"
+            [class.active]="activeFilter() === f.key"
+            (click)="setFilter(f.key)"
+            [attr.aria-pressed]="activeFilter() === f.key"
+          >
+            {{ f.label }}
+          </button>
+        }
+      </div>
+    </header>
+
+    <!-- Product grid -->
+    <div class="product-grid" role="list">
+      @for (product of filteredProducts(); track product.id) {
+        <article class="product-card" role="listitem">
+          <div class="product-card__image-wrap">
+            <img
+              [src]="product.image"
+              [alt]="product.name"
+              class="product-card__image"
+              (error)="onImgError($event)"
+              loading="lazy"
+            >
+            <span class="product-card__price-badge">{{ formatPrice(product.price) }}</span>
+          </div>
+
+          <div class="product-card__body">
+            <h3 class="product-card__name">{{ product.name }}</h3>
+            <p class="product-card__desc">{{ product.description }}</p>
+
+            <div class="product-card__actions">
+              <button class="btn-customize" type="button">
+                Customize
+              </button>
+              <button
+                class="btn-add"
+                type="button"
+                (click)="addToCart(product)"
+                [attr.aria-label]="'Add ' + product.name + ' to cart'"
+              >
+                +
+              </button>
+            </div>
+          </div>
+        </article>
+      }
+
+      @if (filteredProducts().length === 0) {
+        <div class="empty-catalog">
+          <i class="pi pi-inbox"></i>
+          <p>No products in this category.</p>
+        </div>
+      }
+    </div>
+
+    <!-- Footer -->
+    <footer class="catalog-footer" aria-hidden="true">
+      <div class="catalog-footer__left"></div>
+      <nav class="catalog-footer__nav"></nav>
+    </footer>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       RIGHT COLUMN — Cart
+       ═══════════════════════════════════════════════════════════ -->
+  <aside class="cart-panel" aria-label="My cart">
+
+    <!-- Cart header -->
+    <div class="cart-header">
+      <i class="pi pi-shopping-bag cart-header__icon"></i>
+      <h2 class="cart-header__title">My Cart</h2>
+    </div>
+    <hr class="cart-divider">
+
+    <!-- Cart body -->
+    <div class="cart-body">
+
+      @if (cart().length === 0) {
+        <!-- Empty state -->
+        <div class="cart-empty">
+          <div class="cart-empty__icon-wrap" aria-hidden="true">
+            <i class="pi pi-shopping-bag"></i>
+          </div>
+          <p class="cart-empty__text">
+            Your cart is still empty.<br>Add some treats!
+          </p>
+        </div>
+
+      } @else {
+        <!-- Item list -->
+        <ul class="cart-items" role="list">
+          @for (item of cart(); track item.product.id) {
+            <li class="cart-item">
+              <div class="cart-item__info">
+                <span class="cart-item__name">{{ item.product.name }}</span>
+                <span class="cart-item__unit-price">{{ formatPrice(item.product.price) }} / unit</span>
+              </div>
+
+              <div class="cart-item__controls">
+                <button
+                  class="qty-btn"
+                  type="button"
+                  (click)="decreaseQty(item.product.id)"
+                  [attr.aria-label]="'Remove one ' + item.product.name"
+                >−</button>
+                <span class="qty-value">{{ item.quantity }}</span>
+                <button
+                  class="qty-btn"
+                  type="button"
+                  (click)="addToCart(item.product)"
+                  [attr.aria-label]="'Add one ' + item.product.name"
+                >+</button>
+              </div>
+
+              <span class="cart-item__subtotal">{{ formatPrice(item.product.price * item.quantity) }}</span>
+            </li>
+          }
+        </ul>
+      }
+
+    </div>
+
+    <!-- Financial summary -->
+    <div class="cart-summary">
+      <div class="cart-summary__row">
+        <span>Subtotal</span>
+        <span>{{ formatPrice(subtotal()) }}</span>
+      </div>
+      <div class="cart-summary__row">
+        <span>Tax (included)</span>
+        <span>{{ formatPrice(taxAmount()) }}</span>
+      </div>
+      <div class="cart-summary__row cart-summary__row--total">
+        <span>Total</span>
+        <span class="total-amount">{{ formatPrice(total()) }}</span>
+      </div>
+
+      <button
+        class="btn-order"
+        type="button"
+        [disabled]="cart().length === 0"
+        [attr.aria-disabled]="cart().length === 0"
+      >
+        Order
+        <i class="pi pi-arrow-right"></i>
+      </button>
+
+      <p class="cart-eta">
+        <i class="pi pi-clock"></i>
+        Ready in ~15 minutes
+      </p>
+    </div>
+
+  </aside>
+
+</div>

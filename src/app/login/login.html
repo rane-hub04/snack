@@ -1,3 +1,25 @@
+
+<div class="container" [class.login-active]="loginActive">
+  <div class="message-panel left-panel">
+    <div class="content">
+      <h1>Hello, Welcome</h1>
+      <p>Create your account and start using the app today.</p>
+      <button type="button" class="btn transparent" (click)="showLogin()">Login</button>
+    </div>
+  </div>
+
+  <div class="message-panel right-panel">
+    <div class="content">
+      <h1>Welcome Back</h1>
+      <p>Already have an account? </p>
+      <p>Please log in to continue.</p>
+      <button type="button" class="btn transparent" (click)="showRegister()">Register</button>
+    </div>
+  </div>
+
+  <div class="form-panel register-panel">
+    <form>
+      <h1>Register</h1>
 <div class="container">
   <!-- Login Form -->
   <div class="form-box login">
@@ -40,9 +62,37 @@
         <input type="password" placeholder="Mot de passe" required>
         <i class="fa-solid fa-lock"></i>
       </div>
-      <button type="submit" class="btn">S'inscrire</button>
+      <div class="input-box select-box">
+        <select required>
+           <input type="Fonction" placeholder="Fonction" required>
+          <option value="" disabled selected>Fonction</option>
+          <option value="administrateure">Administrateure</option>
+          <option value="client">Client</option>
+          <option value="serveure">Serveure</option>
+          <option value="cuisinier">Cuisinier</option>
+          <option value="caissier">Caissier</option>
+        </select>
+        <i class="fa-solid fa-chevron-down"></i>
+      </div>
+      <button type="submit" class="btn">Register</button>
     </form>
-
+  </div>
+  <div class="form-panel login-panel">
+    <form>
+      <h1>Login</h1>
+      <div class="input-box">
+        <input type="text" placeholder="Username" required>
+        <i class="fa-solid fa-user"></i>
+      </div>
+      <div class="input-box">
+        <input type="password" placeholder="Password" required>
+        <i class="fa-solid fa-lock"></i>
+      </div>
+      <div class="forget-link">
+        <a href="#">Forgot Password?</a>
+      </div>
+      <button type="submit" class="btn">Login</button>
+    </form>
     <!-- Toggle Box -->
     <div class="toggle-box"></div>
     <!-- Toggle Box Left -->
@@ -58,5 +108,6 @@
       <p>Vous avez déjà un compte ?</p>
       <button type="button" class="btn-login-btn">Se connecter</button>
     </div>
+>>>>>>> 6423d381f0d176079484b545e7f16da436a9b35d
   </div>
 </div>
